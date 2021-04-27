@@ -17,7 +17,10 @@ function App() {
     HALBACH_GRADE: 'N50',
     BACK_IRON: 0,
     BACK_IRON_HEIGHT: 1,
-    AIR_GAP: 1
+    IRON_MATERIAL: "1006 Steel",
+    POLE_COUNT: 5,
+    AIR_GAP: 1,
+    MAGNET_GAP:0
   }
 
   const [formVals, setFormVals] = React.useState(defaultVals)
@@ -41,12 +44,14 @@ function App() {
       <>
         <Grid item xs={4}>
           <FormControlLabel
-            control={<TextField onChange={handleInputChange} name="HALBACH_WIDTH" label="Halbach Width" />}
+            filled
+            control={<TextField onChange={handleInputChange} value={formVals.HALBACH_WIDTH} name="HALBACH_WIDTH" label="Halbach Width" />}
           />
         </Grid>
         <Grid item xs={4}>
           <FormControlLabel
-            control={<TextField onChange={handleInputChange} name="HALBACH_HEIGHT"  label="Halbach Height" />}
+            filled
+            control={<TextField onChange={handleInputChange} value={formVals.HALBACH_HEIGHT} name="HALBACH_HEIGHT"  label="Halbach Height" />}
           />
         </Grid>
         <Grid item xs={4}>
@@ -78,9 +83,16 @@ function App() {
   const getBackIronOptions = () => {
     return (
       <>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <FormControlLabel
-            control={<TextField onChange={handleInputChange} name="BACK_IRON_HEIGHT" label="Back Iron Height" />}
+            filled
+            control={<TextField onChange={handleInputChange} value={formVals.BACK_IRON_HEIGHT} name="BACK_IRON_HEIGHT" label="Back Iron Height" />}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <FormControlLabel
+            filled
+            control={<TextField onChange={handleInputChange} value={formVals.IRON_MATERIAL} name="IRON_MATERIAL" label="Iron Material" />}
           />
         </Grid>
       </>
@@ -358,7 +370,7 @@ init()
           <Grid item xs={12}>
           <FormControl component="fieldset">
             <FormLabel component="legend">Units</FormLabel>
-              <RadioGroup aria-label="units" onChange={handleInputChange} name="UNITS" value={formVals.UNITS} >
+              <RadioGroup row aria-label="units" onChange={handleInputChange} name="UNITS" value={formVals.UNITS} >
                 <FormControlLabel value="millimeters" control={<Radio />} label="Millimeters" />
                 <FormControlLabel value="inches" control={<Radio />} label="Inches" />
               </RadioGroup>
@@ -367,12 +379,14 @@ init()
 
           <Grid item xs={4}>
             <FormControlLabel
-              control={<TextField onChange={handleInputChange} name="MAGNET_WIDTH" label="Magnet Width" />}
+            filled
+              control={<TextField onChange={handleInputChange} value={formVals.MAGNET_WIDTH} name="MAGNET_WIDTH" label="Magnet Width" />}
             />
           </Grid>
           <Grid item xs={4}>
             <FormControlLabel
-              control={<TextField onChange={handleInputChange} name="MAGNET_HEIGHT" label="Magnet Height" />}
+              filled
+              control={<TextField onChange={handleInputChange} value={formVals.MAGNET_HEIGHT} name="MAGNET_HEIGHT" label="Magnet Height" />}
             />
           </Grid>
           <Grid item xs={4}>
@@ -388,7 +402,7 @@ init()
             <FormLabel component="legend">Halbach?</FormLabel>
             <FormControlLabel
               control={<Switch value={formVals.halbach} onChange={handleHalbachChange} name="HALBACH" />}
-              label="Yes"
+              label={!showHalbachOptions ? "No" : "Yes"}
             />
           </Grid>
 
@@ -398,15 +412,30 @@ init()
             <FormLabel component="legend">Back Iron?</FormLabel>
             <FormControlLabel
               control={<Switch value={formVals.backIron} onChange={handleBackIronChange} name="BACK_IRON" />}
-              label="Yes"
+              label={!showBackIronOptions ? "No" : "Yes"}
             />
           </Grid>
 
           {showBackIronOptions ? backIronOptions : null}
 
-          <Grid item xs={12}>
+          <Grid item xs={4}>
             <FormControlLabel
-              control={<TextField onChange={handleInputChange} name="AIR_GAP" label="Air Gap" />}
+              filled
+              control={<TextField onChange={handleInputChange} value={formVals.POLE_COUNT} name="POLE_COUNT" label="Pole Count" />}
+            />
+          </Grid>
+
+          <Grid item xs={4}>
+            <FormControlLabel
+              filled
+              control={<TextField onChange={handleInputChange}  value={formVals.AIR_GAP} name="AIR_GAP" label="Air Gap" />}
+            />
+          </Grid>
+
+          <Grid item xs={4}>
+            <FormControlLabel
+              filled
+              control={<TextField onChange={handleInputChange}  value={formVals.MAGNET_GAP} name="MAGNET_GAP" label="Magnet Spacing" />}
             />
           </Grid>
         </Grid>
