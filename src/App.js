@@ -337,7 +337,7 @@ init()
             <h1>FEMM Simulation Generator</h1>
           </Grid>
           <Grid item xs={12}>
-            <Typography>This form will produce a LUA script that can then be run in FEMM to product a simulation</Typography>
+            <Typography>This form will generate a LUA script that can then be run in FEMM to produce a simulation</Typography>
           </Grid>
 
           <Grid item xs={12}>
