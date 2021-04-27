@@ -1,7 +1,7 @@
 import './App.css';
 import 'fontsource-roboto';
 import React from 'react';
-import { Container, Grid, Typography, MenuItem, Button, FormControlLabel, FormControl, FormLabel, InputLabel, RadioGroup, Radio, Select, Switch, TextField } from '@material-ui/core';
+import { Container, Grid, Divider, Card, Typography, MenuItem, Button, FormControlLabel, FormControl, FormLabel, InputLabel, RadioGroup, Radio, Select, Switch, TextField } from '@material-ui/core';
 import { CopyToClipboard } from './Components/CopyToClipboard.js'
 
 function App() {
@@ -55,7 +55,7 @@ function App() {
           />
         </Grid>
         <Grid item xs={4}>
-          <FormControl>
+          <FormControl fullWidth>
             <InputLabel>Halbach Grade</InputLabel>
             <Select value={formVals.HALBACH_GRADE}>
               {magnetOptions}
@@ -358,107 +358,113 @@ init()
 
   return (
     <div className="App">
-      <Container maxWidth="sm">
-        <Grid container item spacing={2} xs={10}>
-          <Grid item xs={12}>
-            <h1>FEMM Simulation Generator</h1>
-          </Grid>
-          <Grid item xs={12}>
-            <Typography>This form will generate a LUA script that can then be run in FEMM to produce a simulation</Typography>
-          </Grid>
+    <Container maxWidth="sm">
+      <Grid container spacing={2}>
+        <Grid item xs={12}>
+          <h1>Air Core Axial Flux PM motor</h1>
+          <h2>FEMM Simulation Generator</h2>
+        </Grid>
+        <Grid item xs={12}>
+          <Typography>This form will generate a LUA script that can then be run in FEMM to produce a 2D simulation of an air-cored axial flux permanant magnet motor.</Typography>
+        </Grid>
+      </Grid>
 
-          <Grid item xs={12}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Units</FormLabel>
-              <RadioGroup row aria-label="units" onChange={handleInputChange} name="UNITS" value={formVals.UNITS} >
-                <FormControlLabel value="millimeters" control={<Radio />} label="Millimeters" />
-                <FormControlLabel value="inches" control={<Radio />} label="Inches" />
-              </RadioGroup>
-            </FormControl>
-          </Grid>
+      <Grid container spacing={4}> 
+        <Grid item xs={12}>
+        <FormControl component="fieldset">
+          <FormLabel component="legend">Units</FormLabel>
+            <RadioGroup row aria-label="units" onChange={handleInputChange} name="UNITS" value={formVals.UNITS} >
+              <FormControlLabel value="millimeters" control={<Radio />} label="Millimeters" />
+              <FormControlLabel value="inches" control={<Radio />} label="Inches" />
+            </RadioGroup>
+          </FormControl>
+        </Grid>
 
-          <Grid item xs={4}>
-            <FormControlLabel
+        <Grid item xs={4}>
+          <FormControlLabel
             filled
-              control={<TextField onChange={handleInputChange} value={formVals.MAGNET_WIDTH} name="MAGNET_WIDTH" label="Magnet Width" />}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <FormControlLabel
-              filled
-              control={<TextField onChange={handleInputChange} value={formVals.MAGNET_HEIGHT} name="MAGNET_HEIGHT" label="Magnet Height" />}
-            />
-          </Grid>
-          <Grid item xs={4}>
-            <FormControl>
-              <InputLabel>Magnet Grade</InputLabel>
-              <Select onChange={handleInputChange} name="MAGNET_GRADE" value={formVals.MAGNET_GRADE}>
-                {magnetOptions}
-              </Select>
-            </FormControl>
-          </Grid>
-
-          <Grid item xs={12}>
-            <FormLabel component="legend">Halbach?</FormLabel>
-            <FormControlLabel
-              control={<Switch value={formVals.halbach} onChange={handleHalbachChange} name="HALBACH" />}
-              label={!showHalbachOptions ? "No" : "Yes"}
-            />
-          </Grid>
-
-          {showHalbachOptions ? halbachOptions : null}
-
-          <Grid item xs={12}>
-            <FormLabel component="legend">Back Iron?</FormLabel>
-            <FormControlLabel
-              control={<Switch value={formVals.backIron} onChange={handleBackIronChange} name="BACK_IRON" />}
-              label={!showBackIronOptions ? "No" : "Yes"}
-            />
-          </Grid>
-
-          {showBackIronOptions ? backIronOptions : null}
-
-          <Grid item xs={4}>
-            <FormControlLabel
-              filled
-              control={<TextField onChange={handleInputChange} value={formVals.POLE_COUNT} name="POLE_COUNT" label="Pole Count" />}
-            />
-          </Grid>
-
-          <Grid item xs={4}>
-            <FormControlLabel
-              filled
-              control={<TextField onChange={handleInputChange}  value={formVals.AIR_GAP} name="AIR_GAP" label="Air Gap" />}
-            />
-          </Grid>
-
-          <Grid item xs={4}>
-            <FormControlLabel
-              filled
-              control={<TextField onChange={handleInputChange}  value={formVals.MAGNET_GAP} name="MAGNET_GAP" label="Magnet Spacing" />}
-            />
-          </Grid>
+            control={<TextField onChange={handleInputChange} value={formVals.MAGNET_WIDTH} name="MAGNET_WIDTH" label="Magnet Width" />}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControlLabel
+            filled
+            control={<TextField onChange={handleInputChange} value={formVals.MAGNET_HEIGHT} name="MAGNET_HEIGHT" label="Magnet Height" />}
+          />
+        </Grid>
+        <Grid item xs={4}>
+          <FormControl fullWidth>
+            <InputLabel>Magnet Grade</InputLabel>
+            <Select onChange={handleInputChange} name="MAGNET_GRADE" value={formVals.MAGNET_GRADE}>
+              {magnetOptions}
+            </Select>
+          </FormControl>
         </Grid>
 
-        <Grid container spacing={3} item xs={12}>
-          <Grid item xs={12}>
-            <TextField fullWidth multiline rows={20} rowsMax={20} value={outputText} />
-          </Grid>
-          <Grid item xs={12}>
-            <CopyToClipboard>
-              {({ copy }) => (
-                <Button
-                  variant="contained"
-                  color="primary"
-                  onClick={() => copy(outputText)}
-                >
-                  Copy
-                </Button>
-              )}
-            </CopyToClipboard>
-          </Grid>
+        <Grid item xs={12}>
+          <FormLabel component="legend">Halbach?</FormLabel>
+          <FormControlLabel
+            control={<Switch value={formVals.halbach} onChange={handleHalbachChange} name="HALBACH" />}
+            label={!showHalbachOptions ? "No" : "Yes"}
+          />
         </Grid>
-      </Container>
+
+        {showHalbachOptions ? halbachOptions : null}
+
+        <Grid item xs={12}>
+          <FormLabel component="legend">Back Iron?</FormLabel>
+          <FormControlLabel
+            control={<Switch value={formVals.backIron} onChange={handleBackIronChange} name="BACK_IRON" />}
+            label={!showBackIronOptions ? "No" : "Yes"}
+          />
+        </Grid>
+
+        {showBackIronOptions ? backIronOptions : null}
+
+        <Grid item xs={4}>
+          <FormControlLabel
+            filled
+            control={<TextField onChange={handleInputChange} value={formVals.POLE_COUNT} name="POLE_COUNT" label="Pole Count" />}
+          />
+        </Grid>
+
+        <Grid item xs={4}>
+          <FormControlLabel
+            filled
+            control={<TextField onChange={handleInputChange}  value={formVals.AIR_GAP} name="AIR_GAP" label="Air Gap" />}
+          />
+        </Grid>
+
+        <Grid item xs={4}>
+          <FormControlLabel
+            filled
+            control={<TextField onChange={handleInputChange}  value={formVals.MAGNET_GAP} name="MAGNET_GAP" label="Magnet Spacing" />}
+          />
+        </Grid>
+      </Grid>
+      <Grid container spacing={3}>
+        <Grid item xs={12}>
+          <h2>Output:</h2>
+          <Typography>Copy this LUA script and paste it in the LUA console in your FEMM program.</Typography>
+        </Grid>
+        <Grid item xs={12}>
+          <TextField fullWidth multiline rows={20} rowsMax={20} value={outputText} />
+        </Grid>
+        <Grid item xs={12}>
+          <CopyToClipboard>
+            {({ copy }) => (
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => copy(outputText)}
+              >
+                Copy
+              </Button>
+            )}
+          </CopyToClipboard>
+        </Grid>
+      </Grid>
+    </Container>
     </div>
   );
 }
