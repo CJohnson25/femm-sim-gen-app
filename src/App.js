@@ -1,7 +1,7 @@
 import './App.css';
 import 'fontsource-roboto';
 import React from 'react';
-import { Container, Grid, Divider, Card, Typography, MenuItem, Button, FormControlLabel, FormControl, FormLabel, InputLabel, RadioGroup, Radio, Select, Switch, TextField } from '@material-ui/core';
+import { Container, Grid, Typography, MenuItem, Button, FormControlLabel, FormControl, FormLabel, InputLabel, RadioGroup, Radio, Select, Switch, TextField } from '@material-ui/core';
 import { CopyToClipboard } from './Components/CopyToClipboard.js'
 
 function App() {
@@ -44,13 +44,13 @@ function App() {
       <>
         <Grid item xs={4}>
           <FormControlLabel
-            filled
+            filled="true"
             control={<TextField onChange={handleInputChange} value={formVals.HALBACH_WIDTH} name="HALBACH_WIDTH" label="Halbach Width" />}
           />
         </Grid>
         <Grid item xs={4}>
           <FormControlLabel
-            filled
+            filled="true"
             control={<TextField onChange={handleInputChange} value={formVals.HALBACH_HEIGHT} name="HALBACH_HEIGHT"  label="Halbach Height" />}
           />
         </Grid>
@@ -85,13 +85,13 @@ function App() {
       <>
         <Grid item xs={6}>
           <FormControlLabel
-            filled
+            filled="true"
             control={<TextField onChange={handleInputChange} value={formVals.BACK_IRON_HEIGHT} name="BACK_IRON_HEIGHT" label="Back Iron Height" />}
           />
         </Grid>
         <Grid item xs={6}>
           <FormControlLabel
-            filled
+            filled="true"
             control={<TextField onChange={handleInputChange} value={formVals.IRON_MATERIAL} name="IRON_MATERIAL" label="Iron Material" />}
           />
         </Grid>
@@ -113,13 +113,12 @@ function App() {
   }
 
   function handleInputChange(e) {
-    const int = parseInt(e.target.value)
-    const val = int ? int : e.target.value
-    formVals.[e.target.name] = val
-
-    setFormVals({...formVals})
-    setOutputText(generateOutputText(formVals))
-
+    const val = e.target.value
+    if (val.match(/^[0-9]+$|^[0-9]+\.[0-9]*$/)) {
+      formVals.[e.target.name] = val
+      setFormVals({...formVals})
+      setOutputText(generateOutputText(formVals))
+    }
   }
 
   function generateOutputText(formVals) {
@@ -382,13 +381,13 @@ init()
 
         <Grid item xs={4}>
           <FormControlLabel
-            filled
+            filled="true"
             control={<TextField onChange={handleInputChange} value={formVals.MAGNET_WIDTH} name="MAGNET_WIDTH" label="Magnet Width" />}
           />
         </Grid>
         <Grid item xs={4}>
           <FormControlLabel
-            filled
+            filled="true"
             control={<TextField onChange={handleInputChange} value={formVals.MAGNET_HEIGHT} name="MAGNET_HEIGHT" label="Magnet Height" />}
           />
         </Grid>
@@ -423,21 +422,21 @@ init()
 
         <Grid item xs={4}>
           <FormControlLabel
-            filled
+            filled="true"
             control={<TextField onChange={handleInputChange} value={formVals.POLE_COUNT} name="POLE_COUNT" label="Pole Count" />}
           />
         </Grid>
 
         <Grid item xs={4}>
           <FormControlLabel
-            filled
+            filled="true"
             control={<TextField onChange={handleInputChange}  value={formVals.AIR_GAP} name="AIR_GAP" label="Air Gap" />}
           />
         </Grid>
 
         <Grid item xs={4}>
           <FormControlLabel
-            filled
+            filled="true"
             control={<TextField onChange={handleInputChange}  value={formVals.MAGNET_GAP} name="MAGNET_GAP" label="Magnet Spacing" />}
           />
         </Grid>
