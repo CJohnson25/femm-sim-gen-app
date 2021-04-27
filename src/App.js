@@ -1,35 +1,48 @@
 import './App.css';
 import 'fontsource-roboto';
-import { FormControlLabel, Switch } from '@material-ui/core';
+import { Grid, FormControlLabel, Switch } from '@material-ui/core';
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
+    <Grid container>
+      <Grid item xs={6}>
         <h1>FEMM Simulation Generator</h1>
-      </header>
+      </Grid>
+      
+      <Grid item xs={6}>
+        <FormControlLabel
+          control={<Switch name="units" />}
+          label="Units"
+        />
+      </Grid>
+
+      <Grid item xs={6}>
+        <FormControlLabel
+          control={<Switch  name="halbach" />}
+          label="Halbach?"
+        />
+      </Grid>
+
+      <Grid item xs={6}>
+        <FormControlLabel
+          control={<Switch  name="backIron" />}
+          label="Back Iron?"
+        />
+      </Grid>
+    </Grid>
 
         # Units - Toggle
-      <FormControlLabel
-        control={<Switch name="units" />}
-        label="Units"
-      />
         # Magnet Width - text
         # Magnet height - text
         # Grade - dropdown
         # halbach? - toggle
-      <FormControlLabel
-        control={<Switch  name="halbach" />}
-        label="Halbach?"
-      />
+      
         # halbach Width - text
         # halbach height - text 
         # halbach Grade - dropdown
         # back iron - toggle
-      <FormControlLabel
-        control={<Switch  name="backIron" />}
-        label="Back Iron?"
-      />
+      
         # back iron height - text
         # air gap - text
 
