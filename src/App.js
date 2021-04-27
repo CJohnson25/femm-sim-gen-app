@@ -8,16 +8,16 @@ function App() {
   const magnetTypes = ['N48', 'N50', 'N52']
   const defaultVals = {
     UNITS: 'millimeters',
-    MAGNET_WIDTH: 0,
-    MAGNET_HEIGHT: 0,
+    MAGNET_WIDTH: 1,
+    MAGNET_HEIGHT: 1,
     MAGNET_GRADE: 'N50',
-    HALBACH: false,
-    HALBACH_WIDTH: 0,
-    HALBACH_HEIGHT: 0,
+    HALBACH: 0,
+    HALBACH_WIDTH: 1,
+    HALBACH_HEIGHT: 1,
     HALBACH_GRADE: 'N50',
-    BACK_IRON: false,
-    BACK_IRON_HEIGHT: 0,
-    AIR_GAP: 0
+    BACK_IRON: 0,
+    BACK_IRON_HEIGHT: 1,
+    AIR_GAP: 1
   }
 
   const [formVals, setFormVals] = React.useState(defaultVals)
@@ -64,11 +64,11 @@ function App() {
   const halbachOptions = getHalbachOptions()
 
   function handleHalbachChange(e) {
-    const inputVal = e.target.checked
+    const inputVal = e.target.checked ? 1: 0
     formVals.HALBACH = inputVal
     if (!inputVal) {
-      //formVals.HALBACH_WIDTH = 0
-      //formVals.HALBACH_HEIGHT = 0
+      formVals.HALBACH_WIDTH = 0
+      formVals.HALBACH_HEIGHT = 0
     }
     setFormVals({...formVals})
     setShowHalbachOptions(inputVal)
@@ -90,7 +90,7 @@ function App() {
   const backIronOptions = getBackIronOptions()
 
   function handleBackIronChange(e) {
-    const inputVal = e.target.checked
+    const inputVal = e.target.checked ? 1: 0
     formVals.BACK_IRON = inputVal
     if (!inputVal) {
       formVals.BACK_IRON_HEIGHT = 0
@@ -115,9 +115,7 @@ function App() {
     const sani = stringifiedVals.replace(/^{\n?|\n?}$/g, "")
     const sani1 = sani.replace(/"(.*)": /g, "$1 = ")
     const sani2 = sani1.replace(/,\n/g, "\n")
-    const sani3 = sani2.replace(/true/g, "1")
-    const sani4 = sani3.replace(/false/g, "0")
-    const complete = sani4 + getProgramCode()
+    const complete = sani2 + getProgramCode()
 
     return complete
   }
