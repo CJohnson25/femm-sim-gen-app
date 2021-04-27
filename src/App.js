@@ -203,11 +203,11 @@ function get_total_height ()
 end
 
 function get_halbach_count() 
-  return SIM_POLE_COUNT
+  return POLE_COUNT
 end
 
 function get_nonhalbach_count() 
-  return SIM_POLE_COUNT + 1 
+  return POLE_COUNT + 1 
 end
 
 function get_total_magnet_count ()
