@@ -174,7 +174,11 @@ function get_pole_width ()
 end
 
 function get_total_width ()
-  return (get_nonhalbach_count() - 1) * (MAGNET_WIDTH + MAGNET_GAP) + get_halbach_count() * (HALBACH_WIDTH + MAGNET_GAP)
+  if HALBACH == 1 then
+    return (get_nonhalbach_count() - 1) * (MAGNET_WIDTH + MAGNET_GAP) + get_halbach_count() * (HALBACH_WIDTH + MAGNET_GAP)
+  else
+    return (get_nonhalbach_count() - 1) * (MAGNET_WIDTH + MAGNET_GAP)
+  end
 end
 
 function get_total_height ()
@@ -195,7 +199,11 @@ function get_nonhalbach_count()
 end
 
 function get_total_magnet_count ()
-  return get_nonhalbach_count() + get_halbach_count()
+  if HALBACH == 1 then
+    return get_nonhalbach_count() + get_halbach_count()
+  else 
+    return get_nonhalbach_count()
+  end
 end
 
 
@@ -233,15 +241,22 @@ function build_rotor_magnets (side)
   
   local current_offset = get_h_gap()
   local y = get_v_gap()
-  if (side == 1) then
+  if side == 1 then
     y = get_v_gap() + MAGNET_HEIGHT*3
   end
 
+  local offset = 90
+  if HALBACH == 1 then
+    offset = 0
+  end
+
   for i = 0, count - 1 do
-    local direction = (360/modulus) * (mod(i, modulus) + 1)
-    if (side == 1) then
-      direction =  (360/modulus) * (modulus - mod(i, modulus) + 1)
+    local direction = (360/modulus) * (mod(i, modulus) + 1) + offset
+    if side == 1 then
+      direction =  (360/modulus) * (modulus - mod(i, modulus) + 1) + offset
     end
+
+    print('direction: ', direction)
     local is_halbach = 0
     local is_end = 0
     local width = MAGNET_WIDTH
