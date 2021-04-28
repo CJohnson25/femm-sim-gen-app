@@ -250,7 +250,7 @@ function build_rotor(side)
     local x = get_h_gap()
     local y = get_v_gap() - BACK_IRON_HEIGHT
     if side == 1 then 
-      y = get_v_gap() + MAGNET_HEIGHT*4
+      y = get_v_gap() + AIR_GAP + MAGNET_HEIGHT*2
     end
     build_rotor_iron(x, y, BACK_IRON_HEIGHT, '1006 Steel')
   end
@@ -267,7 +267,7 @@ function build_rotor_magnets (side)
   local current_offset = get_h_gap()
   local y = get_v_gap()
   if side == 1 then
-    y = get_v_gap() + MAGNET_HEIGHT*3
+    y = get_v_gap() + MAGNET_HEIGHT + AIR_GAP
   end
 
   local offset = 90
@@ -355,7 +355,7 @@ end
 function build_analysis_nodes () 
   local x = get_h_gap()
   local x1 = x + get_total_width()
-  local y = get_v_gap() + MAGNET_HEIGHT*2
+  local y = get_v_gap() + AIR_GAP/2 + MAGNET_HEIGHT
   
   mi_addnode(x, y)
   mi_addnode(x1, y)
