@@ -1,8 +1,11 @@
 import './App.css';
 import 'fontsource-roboto';
 import React from 'react';
-import { Container, Grid, Typography, MenuItem, Button, FormControlLabel, FormControl, FormLabel, InputLabel, RadioGroup, Radio, Select, Switch, TextField } from '@material-ui/core';
+import { Container, Grid, Typography, MenuItem, Divider, Button, IconButton, FormControlLabel, FormControl, FormLabel, InputLabel, RadioGroup, Radio, Select, Switch, TextField } from '@material-ui/core';
 import { CopyToClipboard } from './Components/CopyToClipboard.js'
+import YouTubeIcon from '@material-ui/icons/YouTube';
+import GitHubIcon from '@material-ui/icons/GitHub';
+import pjson from '../package.json'
 
 function App() {
   const magnetTypes = ['N30', 'N33', 'N35', 'N38', 'N40', 'N42', 'N45', 'N48', 'N50', 'N52', 'N55']
@@ -475,6 +478,24 @@ init()
         </Grid>
       </Grid>
     </Container>
+
+    <Divider style={{marginTop: 40}}/>
+    <Grid container style={{marginTop: 40}} justify="flex-end">
+      <Grid item xs={8}>
+          <Typography>Version: {pjson.version}</Typography>
+      </Grid>
+      <Grid item xs={1} >
+        <IconButton target="_blank" variant="contained" color="primary" href="https://www.youtube.com/channel/UCQk0CkSexTb7GQvpGxj4kxw">
+          <YouTubeIcon />
+        </IconButton>
+      </Grid>
+      <Grid item xs={1} >
+        <IconButton target="_blank" variant="contained" color="primary" href="https://github.com/CJohnson25/femm-sim-gen-app/">
+          <GitHubIcon />
+        </IconButton>
+      </Grid>
+    </Grid>
+
     </div>
   );
 }
