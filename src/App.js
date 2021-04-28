@@ -5,7 +5,9 @@ import { Container, Grid, Typography, MenuItem, Button, FormControlLabel, FormCo
 import { CopyToClipboard } from './Components/CopyToClipboard.js'
 
 function App() {
-  const magnetTypes = ['N48', 'N50', 'N52']
+  const magnetTypes = ['N30', 'N33', 'N35', 'N38', 'N40', 'N42', 'N45', 'N48', 'N50', 'N52', 'N55']
+  const ironTypes = ['1006 Steel', '1010 Steel', '1018 Steel', '1020 Steel', '1117 Steel']
+
   const defaultVals = {
     UNITS: 'millimeters',
     MAGNET_WIDTH: 1,
@@ -28,7 +30,6 @@ function App() {
   const [showBackIronOptions, setShowBackIronOptions] = React.useState(defaultVals.BACK_IRON)
   const [outputText, setOutputText] = React.useState(generateOutputText(defaultVals))
 
-
   function getMagnetOptions () {
     return magnetTypes.map((value, i) => {
       return (
@@ -37,7 +38,16 @@ function App() {
     })
   }
 
+  function getIronOptions () {
+    return ironTypes.map((value, i) => {
+      return (
+        <MenuItem key={i} value={value}>{value}</MenuItem>
+      )
+    })
+  }
+
   const magnetOptions = getMagnetOptions()
+  const ironOptions = getIronOptions()
 
   const getHalbachOptions = () => {
     return (
@@ -90,10 +100,11 @@ function App() {
           />
         </Grid>
         <Grid item xs={6}>
-          <FormControlLabel
-            filled="true"
-            control={<TextField onChange={handleInputChange} value={formVals.IRON_MATERIAL} name="IRON_MATERIAL" label="Iron Material" />}
-          />
+          <FormControl fullWidth>Iron Material
+            <Select onChange={handleInputChange} name="IRON_MATERIAL" value={formVals.IRON_MATERIAL}>
+              {ironOptions}
+            </Select>
+          </FormControl>
         </Grid>
       </>
     )
