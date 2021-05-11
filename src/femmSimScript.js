@@ -43,24 +43,52 @@ end
 function get_pole_width ()
   local pole_width = MAGNET_WIDTH + MAGNET_GAP
   if HALBACH == 1 then
-    pole_width = pole_width + HALBACH_WIDTH + MAGNET_GAP
+    return pole_width + HALBACH_WIDTH + MAGNET_GAP
   end
 
   return pole_width
 end
 
-function get_total_width ()
+function is_halbach_taller() 
   if HALBACH == 1 then
-    return (get_nonhalbach_count() - 1) * (MAGNET_WIDTH + MAGNET_GAP) + get_halbach_count() * (HALBACH_WIDTH + MAGNET_GAP)
-  else
-    return (get_nonhalbach_count() - 1) * (MAGNET_WIDTH + MAGNET_GAP)
+    if MAGNET_HEIGHT < HALBACH_HEIGHT then
+      return 1
+    end
   end
+
+  return 0
+end
+
+function get_tallest_magnet_height() 
+  if is_halbach_taller() == 1 then
+    return HALBACH_HEIGHT
+  end
+
+  return MAGNET_HEIGHT
+end
+
+function get_magnet_height_diff() 
+  if HALBACH == 1 then
+    return abs(MAGNET_HEIGHT - HALBACH_HEIGHT)
+  end
+
+  return 0
+end
+
+function get_total_width ()
+  local width = (get_nonhalbach_count() - 1) * (MAGNET_WIDTH + MAGNET_GAP)
+
+  if HALBACH == 1 then
+    return width + get_halbach_count() * (HALBACH_WIDTH + MAGNET_GAP)
+  end
+
+  return width
 end
 
 function get_total_height ()
-  local total_height = MAGNET_HEIGHT*2 + AIR_GAP
+  local total_height = get_tallest_magnet_height() * 2 + AIR_GAP
   if BACK_IRON == 1 then
-    total_height = total_height + BACK_IRON_HEIGHT*2
+    return total_height + BACK_IRON_HEIGHT * 2
   end
 
   return total_height
@@ -75,12 +103,17 @@ function get_nonhalbach_count()
 end
 
 function get_total_magnet_count ()
+  local count = get_nonhalbach_count()
+
   if HALBACH == 1 then
-    return get_nonhalbach_count() + get_halbach_count()
-  else 
-    return get_nonhalbach_count()
+    return count + get_halbach_count()
   end
+
+  return count
 end
+
+
+
 
 
 function build_objects ()
@@ -101,9 +134,9 @@ function build_rotor(side)
     local x = get_h_gap()
     local y = get_v_gap() - BACK_IRON_HEIGHT
     if side == 1 then 
-      y = get_v_gap() + AIR_GAP + MAGNET_HEIGHT*2
+      y = get_v_gap() + AIR_GAP + get_tallest_magnet_height() * 2
     end
-    build_rotor_iron(x, y, BACK_IRON_HEIGHT, '1006 Steel')
+    build_rotor_iron(x, y)
   end
 end
 
@@ -115,11 +148,10 @@ function build_rotor_magnets (side)
     modulus = 4
   end
   
-  local current_offset = get_h_gap()
-  local y = get_v_gap()
-  if side == 1 then
-    y = get_v_gap() + MAGNET_HEIGHT + AIR_GAP
-  end
+  -- init horizontal offset at h gap
+  local current_x_offset = get_h_gap()
+  -- init horizontal offset at v gap. Add gap for the other side
+  local y_offset = get_v_gap()
 
   local offset = 90
   if HALBACH == 1 then
@@ -135,11 +167,27 @@ function build_rotor_magnets (side)
     local is_halbach = 0
     local is_end = 0
     local width = MAGNET_WIDTH
+    local current_y_offset = y_offset
+    if side == 1 then
+      current_y_offset = current_y_offset + AIR_GAP + get_tallest_magnet_height()
+    end
+    local height_diff = get_magnet_height_diff(
 
     -- If iterating Halbach and If current iteration is halbach magnet
     if HALBACH == 1 and mod(i, 2) == 1 then
       is_halbach = 1
       width = HALBACH_WIDTH
+      if side == 1 then
+        if not is_halbach_taller() then
+          current_y_offset = current_y_offset + height_diff
+        end
+      end
+    else
+      if side == 1 then
+        if is_halbach_taller() then
+          current_y_offset = current_y_offset + height_diff
+        end
+      end
     end
 
     -- First or last iteration are half magnets
@@ -148,8 +196,8 @@ function build_rotor_magnets (side)
       width = width/2
     end
 
-    build_magnet(current_offset, y, direction, is_halbach, is_end)
-    current_offset = current_offset + width + MAGNET_GAP
+    build_magnet(current_x_offset, current_y_offset, direction, is_halbach, is_end)
+    current_x_offset = current_x_offset + width + MAGNET_GAP
   end
 end
 

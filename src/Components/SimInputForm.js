@@ -112,9 +112,13 @@ export function SimInputForm() {
 
     if (isStringInputField || validNumInput) {
       formVals[e.target.name] = val
-      setFormVals({ ...formVals })
-      setOutputText(formInputToLuaScript(formVals))
     }
+    if (validNumInput) {
+      formVals[e.target.name] = parseFloat(val)
+    }
+
+    setFormVals({ ...formVals })
+    setOutputText(formInputToLuaScript(formVals))
   }
 
   const magnetOptions = createMenuItemList(magnetTypes)
