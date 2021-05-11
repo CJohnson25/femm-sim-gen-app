@@ -1,4 +1,28 @@
 export const femmSimScript = `
+UNITS = "millimeters"
+MAGNET_WIDTH = 6.35
+MAGNET_HEIGHT = 3.125
+MAGNET_GRADE = "N52"
+HALBACH = 1
+HALBACH_WIDTH = 1.5
+HALBACH_HEIGHT = 3.125
+HALBACH_GRADE = "N50"
+BACK_IRON = 1
+BACK_IRON_HEIGHT = 1
+IRON_MATERIAL = "1006 Steel"
+POLE_COUNT = 5
+AIR_GAP = 7
+MAGNET_GAP = 2
+
+COIL_DIAMETER= 1
+COIL_GAP= 2
+CONDUCTOR_MATERIAL= "32 AWG"
+
+NUM_PHASE_COILS = 3
+NUM_PHASES = 3
+
+ROTOR_TO_STATOR_GAP= 1
+
 function init () 
   -- Create Doc
   showconsole()
@@ -15,6 +39,7 @@ function init ()
   mi_getmaterial("Air")
   mi_getmaterial(IRON_MATERIAL)
   mi_getmaterial(MAGNET_GRADE)
+  mi_getmaterial(CONDUCTOR_MATERIAL)
   if HALBACH == 1 then
     mi_getmaterial(HALBACH_GRADE)
   end
@@ -112,8 +137,74 @@ function get_total_magnet_count ()
   return count
 end
 
+-- TODO make this use a look up table for diameters based on gague selected
+function get_coil_diameter()
+  return COIL_DIAMETER
+end
+
+function get_stator_width()
+  return get_total_coils() * (get_total_coil_gap())
+end
+
+function get_phase_offset(phase)
+  return get_total_coil_gap() * phase + get_h_gap()
+end
+
+function get_phase_gap()
+  return NUM_PHASES * (get_total_coil_gap())
+end
+
+function get_total_coil_gap()
+  return COIL_GAP + get_coil_diameter()
+end
+
+function get_coil_offset(coil_num, phase)
+  local is_top_leg = mod(coil_num, 2)
+  local phase_offset = get_phase_offset(phase)
+  local total_offset = phase_offset + get_phase_gap() * phase + get_total_coil_gap() * coil_num
+  
+  if is_top_leg == 1 then
+    return total_offset
+  else
+    return total_offset + get_total_coil_gap() / 2 
+  end
+end
+
+function get_total_coils() 
+  return NUM_PHASES * NUM_PHASE_COILS
+end
+
+function get_total_legs() 
+  return get_total_coils() * 2
+end
 
 
+
+function build_coil_leg(coil_num, phase) 
+  local is_top_leg = mod(coil_num, 2)
+  local total_coils = get_total_coils()
+  local x = get_coil_offset(coil_num, phase)
+  local h = get_coil_diameter()
+  local y = get_v_gap() + MAGNET_HEIGHT + AIR_GAP - ROTOR_TO_STATOR_GAP - get_coil_diameter()
+  if is_top_leg == 1 then
+    local y = get_v_gap() + MAGNET_HEIGHT + ROTOR_TO_STATOR_GAP
+  end
+
+  build_circle_block(x, y, h, CONDUCTOR_MATERIAL)
+end
+
+function build_coil_phase(phase)
+  for i = 1, (NUM_PHASE_COILS * 2) do
+    build_coil_leg(i, phase)
+  end
+end
+
+function build_coil_phases()
+  for i = 1, NUM_PHASES do
+    build_coil_phase(i)
+  end
+  
+end
 
 
 function build_objects ()
@@ -121,11 +212,12 @@ function build_objects ()
   -- Build the sides separately
   build_rotor(0)
   build_rotor(1)
+  build_coil_phases()
   build_analysis_nodes()
 end
 
 function build_air_bounds()
-  build_block(0, 0, get_bound_width() , get_bound_height(), "Air", "corner", 0)
+  build_square_block(0, 0, get_bound_width() , get_bound_height(), "Air", 0, "corner")
 end
 
 function build_rotor(side) 
@@ -171,7 +263,7 @@ function build_rotor_magnets (side)
     if side == 1 then
       current_y_offset = current_y_offset + AIR_GAP + get_tallest_magnet_height()
     end
-    local height_diff = get_magnet_height_diff(
+    local height_diff = get_magnet_height_diff()
 
     -- If iterating Halbach and If current iteration is halbach magnet
     if HALBACH == 1 and mod(i, 2) == 1 then
@@ -216,15 +308,30 @@ function build_magnet (x, y, direction, is_halbach, is_end)
     w = w/2
   end
 
-  build_block(x, y, w, h, grade, "center", direction)
+  build_square_block(x, y, w, h, grade, direction, "center")
 end
 
 
 function build_rotor_iron (x, y)
-  build_block(x, y, get_total_width(), BACK_IRON_HEIGHT, IRON_MATERIAL, center, 0)
+  build_square_block(x, y, get_total_width(), BACK_IRON_HEIGHT, IRON_MATERIAL, 0, "center")
 end
 
-function build_block(x, y, w, h, material, label_position, direction)
+function build_circle_block(x, y, h, material, direction)
+  local y1 = y + h
+
+  mi_addnode(x, y)
+  mi_addnode(x, y1)
+
+  mi_addarc(x, y, x, y1, 180, 1)
+  mi_addarc(x, y1, x, y, 180, 1)
+
+  local labelX = x
+  local labelY = y + h/2
+
+  add_block_props(labelX, labelY, material, direction)
+end
+
+function build_square_block(x, y, w, h, material, direction, label_position)
   local x1 = x + w
   local y1 = y + h
 
@@ -244,6 +351,11 @@ function build_block(x, y, w, h, material, label_position, direction)
     labelX = x + w/8
     labelY = y + h/8
   end
+
+  add_block_props(labelX, labelY, material, direction)
+end
+
+function add_block_props(labelX, labelY, material, direction)
   mi_addblocklabel(labelX, labelY)
   mi_selectlabel(labelX, labelY)
   mi_setblockprop(material, 1, 0,"", direction)
@@ -258,6 +370,7 @@ function build_analysis_nodes ()
   mi_addnode(x, y)
   mi_addnode(x1, y)
 end
+
 
 function analyze_problem ()
   
