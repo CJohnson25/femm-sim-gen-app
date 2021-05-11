@@ -14,8 +14,7 @@ POLE_COUNT = 5
 AIR_GAP = 7
 MAGNET_GAP = 2
 
-COIL_DIAMETER= 1
-COIL_GAP= 2
+CONDUCTOR_DIAMETER= 1
 CONDUCTOR_MATERIAL= "32 AWG"
 
 NUM_PHASE_COILS = 3
@@ -139,15 +138,15 @@ end
 
 -- TODO make this use a look up table for diameters based on gague selected
 function get_coil_diameter()
-  return COIL_DIAMETER
+  return CONDUCTOR_DIAMETER
 end
 
 function get_stator_width()
-  return get_total_coils() * (get_total_coil_gap())
+  return get_total_coils() * get_total_coil_gap()
 end
 
 function get_phase_offset(phase)
-  return get_total_coil_gap() * phase + get_h_gap()
+  return get_total_coil_gap() * (phase - 1)
 end
 
 function get_phase_gap()
@@ -155,13 +154,19 @@ function get_phase_gap()
 end
 
 function get_total_coil_gap()
-  return COIL_GAP + get_coil_diameter()
+  local total_coils = get_total_coils()
+  return get_total_width() / total_coils
+end
+
+function get_coil_gap()
+  local total_coils = get_total_coils()
+  return (get_total_width() - (total_coils * get_coil_diameter())) / total_coils
 end
 
 function get_coil_offset(coil_num, phase)
   local is_top_leg = mod(coil_num, 2)
   local phase_offset = get_phase_offset(phase)
-  local total_offset = phase_offset + get_phase_gap() * phase + get_total_coil_gap() * coil_num
+  local total_offset = get_total_coil_gap() * (coil_num - 1) + phase_offset + get_h_gap() + get_coil_gap()
   
   if is_top_leg == 1 then
     return total_offset
@@ -178,16 +183,13 @@ function get_total_legs()
   return get_total_coils() * 2
 end
 
-
-
 function build_coil_leg(coil_num, phase) 
   local is_top_leg = mod(coil_num, 2)
-  local total_coils = get_total_coils()
-  local x = get_coil_offset(coil_num, phase)
   local h = get_coil_diameter()
-  local y = get_v_gap() + MAGNET_HEIGHT + AIR_GAP - ROTOR_TO_STATOR_GAP - get_coil_diameter()
+  local x = get_coil_offset(coil_num, phase)
+  local y = get_v_gap() + get_tallest_magnet_height() + ROTOR_TO_STATOR_GAP
   if is_top_leg == 1 then
-    local y = get_v_gap() + MAGNET_HEIGHT + ROTOR_TO_STATOR_GAP
+    y = get_v_gap() + get_tallest_magnet_height() + AIR_GAP - ROTOR_TO_STATOR_GAP - get_coil_diameter()
   end
 
   build_circle_block(x, y, h, CONDUCTOR_MATERIAL)
