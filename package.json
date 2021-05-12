@@ -1,7 +1,7 @@
 {
   "name": "femm-sim-gen-app",
   "homepage": "http://CJohnson25.github.io/femm-sim-gen-app",
-  "version": "0.5.1",
+  "version": "0.6.0",
   "private": true,
   "dependencies": {
     "@material-ui/core": "^4.11.3",
