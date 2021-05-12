@@ -23,9 +23,9 @@ function init ()
   -- Add Circuits
   for i = 1, NUM_PHASES do
     local phase_label = get_phase_label(i)
-    local current = get_phase_current()
+    local current = get_phase_current(i)
     local circuit_type = 1 -- 1 for series 0 for paralell
-    mi_addcircprop(phase_label, i, circuit_type)
+    mi_addcircprop(phase_label, current, circuit_type)
   end
 
   build_objects()
@@ -33,8 +33,14 @@ function init ()
   mi_zoomnatural()
 end
 
-function get_phase_current()
-  return 32
+function get_phase_current(phase)
+  if phase == 1 then
+    return 32
+  elseif phase == 2 then
+    return 27.71
+  else
+    return -27.71
+  end
 end
 
 function get_phase_label(phase) 
@@ -254,13 +260,17 @@ function build_rotor_magnets (side)
       is_halbach = 1
       width = HALBACH_WIDTH
       if side == 1 then
-        if not is_halbach_taller() then
+      print("test")
+      print(not is_halbach_taller())
+      if is_halbach_taller() == 0 then
+      print("test2")
+      print(height_diff)
           current_y_offset = current_y_offset + height_diff
         end
       end
     else
       if side == 1 then
-        if is_halbach_taller() then
+        if is_halbach_taller() == 1 then
           current_y_offset = current_y_offset + height_diff
         end
       end

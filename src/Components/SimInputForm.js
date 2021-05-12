@@ -8,7 +8,7 @@ export function SimInputForm() {
   const magnetTypes = ['N30', 'N33', 'N35', 'N38', 'N40', 'N42', 'N45', 'N48', 'N50', 'N52', 'N55']
   const ironTypes = ['1006 Steel', '1010 Steel', '1018 Steel', '1020 Steel', '1117 Steel']
   const conductorTypes = ['10 AWG', '12 AWG', '14 AWG', '16 AWG', '18 AWG', '20 AWG', '22 AWG', '24 AWG', '26 AWG', '28 AWG', '30 AWG', '32 AWG', '34 AWG', '36 AWG']
-  const stringInputFields = ['MAGNET_GRADE', 'HALBACH_GRADE', 'IRON_MATERIAL']
+  const stringInputFields = ['MAGNET_GRADE', 'HALBACH_GRADE', 'IRON_MATERIAL', 'CONDUCTOR_MATERIAL']
 
   const defaultVals = {
     UNITS: 'millimeters',
@@ -22,13 +22,13 @@ export function SimInputForm() {
     BACK_IRON: 0,
     BACK_IRON_HEIGHT: 1,
     IRON_MATERIAL: "1006 Steel",
-    POLE_COUNT: 3,
+    POLE_COUNT: 5,
     AIR_GAP: 10,
     MAGNET_GAP: 1,
     CONDUCTOR: 0,
-    CONDUCTOR_DIAMETER: 3,
+    CONDUCTOR_DIAMETER: 2,
     CONDUCTOR_MATERIAL: "32 AWG",
-    NUM_PHASE_COILS: 5,
+    NUM_PHASE_COILS: 3,
     NUM_PHASES: 3,
     NUM_TURNS: 4,
     ROTOR_TO_STATOR_GAP: 1
