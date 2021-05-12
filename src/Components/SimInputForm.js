@@ -7,6 +7,7 @@ import { formInputToLuaScript } from '../util'
 export function SimInputForm() {
   const magnetTypes = ['N30', 'N33', 'N35', 'N38', 'N40', 'N42', 'N45', 'N48', 'N50', 'N52', 'N55']
   const ironTypes = ['1006 Steel', '1010 Steel', '1018 Steel', '1020 Steel', '1117 Steel']
+  const conductorTypes = ['10 AWG', '12 AWG', '14 AWG', '16 AWG', '18 AWG', '20 AWG', '22 AWG', '24 AWG', '26 AWG', '28 AWG', '30 AWG', '32 AWG', '34 AWG', '36 AWG']
   const stringInputFields = ['MAGNET_GRADE', 'HALBACH_GRADE', 'IRON_MATERIAL']
 
   const defaultVals = {
@@ -21,18 +22,26 @@ export function SimInputForm() {
     BACK_IRON: 0,
     BACK_IRON_HEIGHT: 1,
     IRON_MATERIAL: "1006 Steel",
-    POLE_COUNT: 5,
-    AIR_GAP: 1,
-    MAGNET_GAP: 0
+    POLE_COUNT: 3,
+    AIR_GAP: 10,
+    MAGNET_GAP: 1,
+    CONDUCTOR: 0,
+    CONDUCTOR_DIAMETER: 3,
+    CONDUCTOR_MATERIAL: "32 AWG",
+    NUM_PHASE_COILS: 5,
+    NUM_PHASES: 3,
+    NUM_TURNS: 4,
+    ROTOR_TO_STATOR_GAP: 1
   }
 
   const [formVals, setFormVals] = React.useState(defaultVals)
   const [showHalbachOptions, setShowHalbachOptions] = React.useState(defaultVals.HALBACH)
   const [showBackIronOptions, setShowBackIronOptions] = React.useState(defaultVals.BACK_IRON)
+  const [showConductorOptions, setShowConductorOptions] = React.useState(defaultVals.CONDUCTOR)
   const [outputText, setOutputText] = React.useState(formInputToLuaScript(defaultVals))
 
   function createMenuItemList(listItems) {
-    
+
     return listItems.map((value, i) => {
       return (
         <MenuItem key={i} value={value}>{value}</MenuItem>
@@ -59,7 +68,7 @@ export function SimInputForm() {
           <FormControl fullWidth>
             <InputLabel>Halbach Grade</InputLabel>
             <Select onChange={handleInputChange} name="HALBACH_GRADE" value={formVals.HALBACH_GRADE}>
-              {magnetOptions}
+              {magnetTypeOptions}
             </Select>
           </FormControl>
         </Grid>
@@ -79,9 +88,56 @@ export function SimInputForm() {
         <Grid item xs={6}>
           <FormControl fullWidth>Iron Material
               <Select onChange={handleInputChange} name="IRON_MATERIAL" value={formVals.IRON_MATERIAL}>
-              {ironOptions}
+              {ironTypeOptions}
             </Select>
           </FormControl>
+        </Grid>
+      </>
+    )
+  }
+
+  const getConductorOptions = () => {
+    return (
+      <>
+        <Grid item xs={12} >
+          <Typography>Currently this will only correcetly simulate 3 Phase designs</Typography>
+        </Grid>
+        <Grid item xs={6}>
+          <FormControlLabel
+            filled="true"
+            control={<TextField onChange={handleInputChange} value={formVals.CONDUCTOR_DIAMETER} name="CONDUCTOR_DIAMETER" label="Conductor Diameter" />}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <FormControl fullWidth>Conductor Material
+              <Select onChange={handleInputChange} name="CONDUCTOR_MATERIAL" value={formVals.CONDUCTOR_MATERIAL}>
+              {conductorTypeOptions}
+            </Select>
+          </FormControl>
+        </Grid>
+        {/* <Grid item xs={6}>
+          <FormControlLabel
+            filled="true"
+            control={<TextField onChange={handleInputChange} value={formVals.NUM_PHASES} name="NUM_PHASES" label="# of Phases" />}
+          />
+        </Grid> */}
+        <Grid item xs={6}>
+          <FormControlLabel
+            filled="true"
+            control={<TextField onChange={handleInputChange} value={formVals.NUM_PHASE_COILS} name="NUM_PHASE_COILS" label="# of Coils per Phase" />}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <FormControlLabel
+            filled="true"
+            control={<TextField onChange={handleInputChange} value={formVals.NUM_TURNS} name="NUM_TURNS" label="# of Turns per Phase" />}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <FormControlLabel
+            filled="true"
+            control={<TextField onChange={handleInputChange} value={formVals.ROTOR_TO_STATOR_GAP} name="ROTOR_TO_STATOR_GAP" label="Rotor to Stator Air Gap" />}
+          />
         </Grid>
       </>
     )
@@ -105,36 +161,57 @@ export function SimInputForm() {
     setOutputText(formInputToLuaScript(formVals))
   }
 
-  function handleInputChange(e) {
-    const val = e.target.value
-    const isStringInputField = stringInputFields.includes(e.target.name)
-    const validNumInput = val.match(/^[0-9]+$|^[0-9]+\.[0-9]*$/)
-
-    if (isStringInputField || validNumInput) {
-      formVals[e.target.name] = val
-    }
-    if (validNumInput) {
-      formVals[e.target.name] = parseFloat(val)
-    }
+  function handleConductorChange(e) {
+    const inputVal = e.target.checked ? 1 : 0
+    formVals.CONDUCTOR = inputVal
 
     setFormVals({ ...formVals })
+    setShowConductorOptions(inputVal)
     setOutputText(formInputToLuaScript(formVals))
   }
 
-  const magnetOptions = createMenuItemList(magnetTypes)
-  const ironOptions = createMenuItemList(ironTypes)
+  function handleInputChange(e) {
+    const val = e.target.value
+    console.log(val)
+    const isStringInputField = stringInputFields.includes(e.target.name)
+    const validNumInput = val.match(/^[0-9]+$|^[0-9]+\.[0-9]*$/)
+    console.log(validNumInput)
+
+    if (isStringInputField) {
+      formVals[e.target.name] = val
+      setFormVals({ ...formVals })
+      setOutputText(formInputToLuaScript(formVals))
+    }
+    if (validNumInput) {
+      let valToSave = parseFloat(val)
+      if (val.match(/\.$/)) {
+        valToSave = val
+      }
+
+      formVals[e.target.name] = valToSave
+      setFormVals({ ...formVals })
+      setOutputText(formInputToLuaScript(formVals))
+    }
+
+  }
+
+  const magnetTypeOptions = createMenuItemList(magnetTypes)
+  const ironTypeOptions = createMenuItemList(ironTypes)
+  const conductorTypeOptions = createMenuItemList(conductorTypes)
   const halbachOptions = getHalbachOptions()
   const backIronOptions = getBackIronOptions()
+  const conductorOptions = getConductorOptions()
 
   return (
     <>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <h1>Air Core Axial Flux PM motor</h1>
+          <h1> 3 Phase Air Core Toroidial Axial Flux PM motor</h1>
           <h2>FEMM Simulation Generator</h2>
         </Grid>
         <Grid item xs={12}>
-          <Typography>This form will generate a LUA script that can then be run in FEMM to produce a 2D simulation of an air-cored axial flux permanant magnet motor.</Typography>
+          <Typography>This form will generate a LUA script that can then be run in FEMM to produce a 2D simulation of a 3 phase air-cored toroidially wound axial flux permanant magnet motor.</Typography>
+          <Typography>This is still a work in progress and will hopefully support other motor architechtures in the future.</Typography>
         </Grid>
       </Grid>
 
@@ -165,7 +242,7 @@ export function SimInputForm() {
           <FormControl fullWidth>
             <InputLabel>Magnet Grade</InputLabel>
             <Select onChange={handleInputChange} name="MAGNET_GRADE" value={formVals.MAGNET_GRADE}>
-             {magnetOptions}
+              {magnetTypeOptions}
             </Select>
           </FormControl>
         </Grid>
@@ -173,7 +250,7 @@ export function SimInputForm() {
         <Grid item xs={12}>
           <FormLabel component="legend">Halbach?</FormLabel>
           <FormControlLabel
-            control={<Switch value={formVals.halbach} onChange={handleHalbachChange} name="HALBACH" />}
+            control={<Switch value={formVals.HALBACH} onChange={handleHalbachChange} name="HALBACH" />}
             label={!showHalbachOptions ? "No" : "Yes"}
           />
         </Grid>
@@ -183,7 +260,7 @@ export function SimInputForm() {
         <Grid item xs={12}>
           <FormLabel component="legend">Back Iron?</FormLabel>
           <FormControlLabel
-            control={<Switch value={formVals.backIron} onChange={handleBackIronChange} name="BACK_IRON" />}
+            control={<Switch value={formVals.BACK_IRON} onChange={handleBackIronChange} name="BACK_IRON" />}
             label={!showBackIronOptions ? "No" : "Yes"}
           />
         </Grid>
@@ -210,6 +287,17 @@ export function SimInputForm() {
             control={<TextField onChange={handleInputChange} value={formVals.MAGNET_GAP} name="MAGNET_GAP" label="Magnet Spacing" />}
           />
         </Grid>
+
+        <Grid item xs={12}>
+          <FormLabel component="legend">Simulate Air Core?</FormLabel>
+          <FormControlLabel
+            control={<Switch value={formVals.CONDUCTOR} onChange={handleConductorChange} name="CONDUCTOR" />}
+            label={!showConductorOptions ? "No" : "Yes"}
+          />
+        </Grid>
+
+        {showConductorOptions ? conductorOptions : null}
+
       </Grid>
       <Grid container spacing={3}>
         <Grid item xs={12}>
