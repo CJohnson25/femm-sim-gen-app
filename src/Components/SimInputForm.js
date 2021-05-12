@@ -172,10 +172,8 @@ export function SimInputForm() {
 
   function handleInputChange(e) {
     const val = e.target.value
-    console.log(val)
     const isStringInputField = stringInputFields.includes(e.target.name)
     const validNumInput = val.match(/^[0-9]+$|^[0-9]+\.[0-9]*$/)
-    console.log(validNumInput)
 
     if (isStringInputField) {
       formVals[e.target.name] = val
