@@ -8,7 +8,7 @@ import { Footer } from './Components/Footer'
 function App() {
   return (
     <div className="App">
-      <Container maxWidth="sm">
+      <Container maxWidth="md">
         <SimInputForm />
       </Container>
       <Divider style={{ marginTop: 40 }} />
