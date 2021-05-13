@@ -27,6 +27,9 @@ export function SimInputForm() {
     BACK_IRON_MATERIAL: '1006 Steel',
     AIR_GAP: 10,
     STATOR: 1,
+    RECTANGLE_CONDUCTOR: 0,
+    CONDUCTOR_WIDTH: 1,
+    CONDUCTOR_HEIGHT: 1,
     CONDUCTOR_DIAMETER: 2,
     CONDUCTOR_MATERIAL: '32 AWG',
     PEAK_CURRENT: 10,
@@ -42,6 +45,7 @@ export function SimInputForm() {
   const [showHalbachOptions, setShowHalbachOptions] = React.useState(defaultVals.HALBACH)
   const [showBackIronOptions, setShowBackIronOptions] = React.useState(defaultVals.BACK_IRON)
   // const [showConductorOptions, setShowConductorOptions] = React.useState(defaultVals.STATOR)
+  const [showRectangleConductorOptions, setShowRectangleConductorOptions] = React.useState(defaultVals.RECTANGLE_CONDUCTOR)
   const [showAnalysisOptions, setShowAnalysisOptions] = React.useState(defaultVals.ANALYSIS)
   const [outputText, setOutputText] = React.useState(formInputToLuaScript(defaultVals))
 
@@ -102,17 +106,22 @@ export function SimInputForm() {
   }
 
   const getConductorOptions = () => {
+    const rectangleConductorOptions = getRectangleConductorOptions()
+    const circleConductorOptions = getCircleConductorOptions()
+
     return (
       <>
         <Grid item xs={12} >
           <Typography>Currently this will only simulate 3 phase designs wiith overlapped windings.</Typography>
         </Grid>
-        <Grid item xs={6}>
+        <Grid item xs={12}>
+          <FormLabel component="legend">Rectangle conductor?</FormLabel>
           <FormControlLabel
-            filled="true"
-            control={<TextField onChange={handleInputChange} value={formVals.CONDUCTOR_DIAMETER} name="CONDUCTOR_DIAMETER" label="Conductor Diameter" />}
+            control={<Switch value={formVals.RECTANGLE_CONDUCTOR} onChange={handleRectangleConductorChange} name="STATOR" />}
+            label={!showRectangleConductorOptions ? "No" : "Yes"}
           />
         </Grid>
+        {showRectangleConductorOptions ? rectangleConductorOptions : circleConductorOptions}
         <Grid item xs={6}>
           <FormControl fullWidth>Conductor Material
               <Select onChange={handleInputChange} name="CONDUCTOR_MATERIAL" value={formVals.CONDUCTOR_MATERIAL}>
@@ -174,6 +183,38 @@ export function SimInputForm() {
     )
   }
 
+  const getRectangleConductorOptions = () => {
+    return (
+      <>
+        <Grid item xs={6}>
+          <FormControlLabel
+            filled="true"
+            control={<TextField onChange={handleInputChange} value={formVals.CONDUCTOR_WIDTH} name="CONDUCTOR_WIDTH" label="conductor Width" />}
+          />
+        </Grid>
+        <Grid item xs={6}>
+          <FormControlLabel
+            filled="true"
+            control={<TextField onChange={handleInputChange} value={formVals.CONDUCTOR_HEIGHT} name="CONDUCTOR_HEIGHT" label="conductor Height" />}
+          />
+        </Grid>
+      </>
+    )
+  }
+  
+  const getCircleConductorOptions = () => {
+    return (
+      <>
+        <Grid item xs={12}>
+          <FormControlLabel
+            filled="true"
+            control={<TextField onChange={handleInputChange} value={formVals.CONDUCTOR_DIAMETER} name="CONDUCTOR_DIAMETER" label="Conductor Diameter" />}
+          />
+        </Grid>
+      </>
+    )
+  }
+
   function handleHalbachChange(e) {
     const inputVal = e.target.checked ? 1 : 0
     formVals.HALBACH = inputVal
@@ -200,6 +241,15 @@ export function SimInputForm() {
   //   setShowConductorOptions(inputVal)
   //   setOutputText(formInputToLuaScript(formVals))
   // }
+  
+  function handleRectangleConductorChange(e) {
+    const inputVal = e.target.checked ? 1 : 0
+    formVals.RECTANGLE_CONDUCTOR = inputVal
+
+    setFormVals({ ...formVals })
+    setShowRectangleConductorOptions(inputVal)
+    setOutputText(formInputToLuaScript(formVals))
+  }
 
   function handleAnalysisChange(e) {
     const inputVal = e.target.checked ? 1 : 0
@@ -239,6 +289,7 @@ export function SimInputForm() {
   const halbachOptions = getHalbachOptions()
   const backIronOptions = getBackIronOptions()
   const conductorOptions = getConductorOptions()
+  // const rectangleConductorOptions = getRectangleConductorOptions()
   const analysisOptions = getAnalysisOptions()
 
   return (
