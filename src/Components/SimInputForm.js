@@ -1,5 +1,5 @@
 import React from 'react';
-import { Grid, Typography, MenuItem, Button, FormControlLabel, FormControl, FormLabel, InputLabel, RadioGroup, Radio, Select, Switch, TextField } from '@material-ui/core';
+import { Grid, Typography, MenuItem, Button, Card, CardContent, FormControlLabel, FormControl, FormLabel, InputLabel, RadioGroup, Radio, Select, Switch, TextField } from '@material-ui/core';
 import { CopyToClipboard } from './CopyToClipboard'
 import { formInputToLuaScript } from '../util'
 
@@ -22,13 +22,13 @@ export function SimInputForm() {
     BACK_IRON: 0,
     BACK_IRON_HEIGHT: 1,
     IRON_MATERIAL: "1006 Steel",
-    POLE_COUNT: 5,
+    POLE_COUNT: 6,
     AIR_GAP: 10,
     MAGNET_GAP: 1,
-    CONDUCTOR: 0,
+    CONDUCTOR: 1,
     CONDUCTOR_DIAMETER: 2,
     CONDUCTOR_MATERIAL: "32 AWG",
-    NUM_PHASE_COILS: 3,
+    NUM_PHASE_COILS: 2,
     NUM_PHASES: 3,
     NUM_TURNS: 4,
     ROTOR_TO_STATOR_GAP: 1,
@@ -53,19 +53,19 @@ export function SimInputForm() {
   const getHalbachOptions = () => {
     return (
       <>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <FormControlLabel
             filled="true"
             control={<TextField onChange={handleInputChange} value={formVals.HALBACH_WIDTH} name="HALBACH_WIDTH" label="Halbach Width" />}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={6}>
           <FormControlLabel
             filled="true"
             control={<TextField onChange={handleInputChange} value={formVals.HALBACH_HEIGHT} name="HALBACH_HEIGHT" label="Halbach Height" />}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item xs={12}>
           <FormControl fullWidth>
             <InputLabel>Halbach Grade</InputLabel>
             <Select onChange={handleInputChange} name="HALBACH_GRADE" value={formVals.HALBACH_GRADE}>
@@ -101,7 +101,7 @@ export function SimInputForm() {
     return (
       <>
         <Grid item xs={12} >
-          <Typography>Currently this will only correcetly simulate 3 Phase designs</Typography>
+          <Typography>Currently this will only simulate 3 phase designs wiith overlapped windings.</Typography>
         </Grid>
         <Grid item xs={6}>
           <FormControlLabel
@@ -122,12 +122,12 @@ export function SimInputForm() {
             control={<TextField onChange={handleInputChange} value={formVals.NUM_PHASES} name="NUM_PHASES" label="# of Phases" />}
           />
         </Grid> */}
-        <Grid item xs={6}>
+        {/* <Grid item xs={6}>
           <FormControlLabel
             filled="true"
             control={<TextField onChange={handleInputChange} value={formVals.NUM_PHASE_COILS} name="NUM_PHASE_COILS" label="# of Coils per Phase" />}
           />
-        </Grid>
+        </Grid> */}
         <Grid item xs={6}>
           <FormControlLabel
             filled="true"
@@ -146,7 +146,7 @@ export function SimInputForm() {
             control={<TextField onChange={handleInputChange} value={formVals.PEAK_CURRENT} name="PEAK_CURRENT" label="Peak Current" />}
           />
         </Grid>
-        
+
       </>
     )
   }
@@ -212,8 +212,7 @@ export function SimInputForm() {
     <>
       <Grid container spacing={2}>
         <Grid item xs={12}>
-          <h1> 3 Phase Air Core Toroidial Axial Flux PM motor</h1>
-          <h2>FEMM Simulation Generator</h2>
+          <Typography variant='h2'>Motor Sim Generator</Typography>
         </Grid>
         <Grid item xs={12}>
           <Typography>This form will generate a LUA script that can then be run in FEMM to produce a 2D simulation of a 3 phase air-cored toroidially wound axial flux permanant magnet motor.</Typography>
@@ -221,88 +220,107 @@ export function SimInputForm() {
         </Grid>
       </Grid>
 
-      <Grid container spacing={4}>
-        <Grid item xs={12}>
-          <FormControl component="fieldset">
-            <FormLabel component="legend">Units</FormLabel>
-            <RadioGroup row aria-label="units" onChange={handleInputChange} name="UNITS" value={formVals.UNITS} >
-              <FormControlLabel value="millimeters" control={<Radio />} label="Millimeters" />
-              <FormControlLabel value="inches" control={<Radio />} label="Inches" />
-            </RadioGroup>
-          </FormControl>
+      <Grid container spacing={2}>
+        <Grid item xs={12} md={6}>
+          <Card>
+          <CardContent>
+            <Grid container spacing={4}>
+              <Grid item xs={12}>
+                <Typography variant='h2'>
+                  Rotor
+                </Typography>
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl component="fieldset">
+                  <FormLabel component="legend">Units</FormLabel>
+                  <RadioGroup row aria-label="units" onChange={handleInputChange} name="UNITS" value={formVals.UNITS} >
+                    <FormControlLabel value="millimeters" control={<Radio />} label="Millimeters" />
+                    <FormControlLabel value="inches" control={<Radio />} label="Inches" />
+                  </RadioGroup>
+                </FormControl>
+              </Grid>
+              <Grid item xs={6}>
+                <FormControlLabel
+                  filled="true"
+                  control={<TextField onChange={handleInputChange} value={formVals.AIR_GAP} name="AIR_GAP" label="Air Gap" />}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <FormControlLabel
+                  filled="true"
+                  control={<TextField onChange={handleInputChange} value={formVals.MAGNET_GAP} name="MAGNET_GAP" label="Magnet Spacing" />}
+                />
+              </Grid>
+              {/* <Grid item xs={4}>
+                <FormControlLabel
+                  filled="true"
+                  control={<TextField onChange={handleInputChange} value={formVals.POLE_COUNT} name="POLE_COUNT" label="Pole Count" />}
+                />
+              </Grid> */}
+              <Grid item xs={6}>
+                <FormControlLabel
+                  filled="true"
+                  control={<TextField onChange={handleInputChange} value={formVals.MAGNET_WIDTH} name="MAGNET_WIDTH" label="Magnet Width" />}
+                />
+              </Grid>
+              <Grid item xs={6}>
+                <FormControlLabel
+                  filled="true"
+                  control={<TextField onChange={handleInputChange} value={formVals.MAGNET_HEIGHT} name="MAGNET_HEIGHT" label="Magnet Height" />}
+                />
+              </Grid>
+              <Grid item xs={12}>
+                <FormControl fullWidth>
+                  <InputLabel>Magnet Grade</InputLabel>
+                  <Select onChange={handleInputChange} name="MAGNET_GRADE" value={formVals.MAGNET_GRADE}>
+                    {magnetTypeOptions}
+                  </Select>
+                </FormControl>
+              </Grid>
+
+              <Grid item xs={12}>
+                <FormLabel component="legend">Halbach?</FormLabel>
+                <FormControlLabel
+                  control={<Switch value={formVals.HALBACH} onChange={handleHalbachChange} name="HALBACH" />}
+                  label={!showHalbachOptions ? "No" : "Yes"}
+                />
+              </Grid>
+              {showHalbachOptions ? halbachOptions : null}
+
+              <Grid item xs={12}>
+                <FormLabel component="legend">Back Iron?</FormLabel>
+                <FormControlLabel
+                  control={<Switch value={formVals.BACK_IRON} onChange={handleBackIronChange} name="BACK_IRON" />}
+                  label={!showBackIronOptions ? "No" : "Yes"}
+                />
+              </Grid>
+              {showBackIronOptions ? backIronOptions : null}
+            </Grid>
+            </CardContent>
+          </Card>
         </Grid>
 
-        <Grid item xs={4}>
-          <FormControlLabel
-            filled="true"
-            control={<TextField onChange={handleInputChange} value={formVals.MAGNET_WIDTH} name="MAGNET_WIDTH" label="Magnet Width" />}
-          />
+        <Grid item xs={12} md={6}>
+          <Card>
+            <CardContent> 
+              <Grid container spacing={4} >
+                <Grid item xs={12}>
+                  <Typography variant='h2'>
+                    Stator
+                  </Typography>
+                </Grid>
+                {/* <Grid item xs={12}>
+                  <FormLabel component="legend">Simulate Air Core?</FormLabel>
+                  <FormControlLabel
+                    control={<Switch value={formVals.CONDUCTOR} onChange={handleConductorChange} name="CONDUCTOR" />}
+                    label={!showConductorOptions ? "No" : "Yes"}
+                  />
+                </Grid> */}
+                {conductorOptions}         
+              </Grid>
+            </CardContent>
+          </Card>
         </Grid>
-        <Grid item xs={4}>
-          <FormControlLabel
-            filled="true"
-            control={<TextField onChange={handleInputChange} value={formVals.MAGNET_HEIGHT} name="MAGNET_HEIGHT" label="Magnet Height" />}
-          />
-        </Grid>
-        <Grid item xs={4}>
-          <FormControl fullWidth>
-            <InputLabel>Magnet Grade</InputLabel>
-            <Select onChange={handleInputChange} name="MAGNET_GRADE" value={formVals.MAGNET_GRADE}>
-              {magnetTypeOptions}
-            </Select>
-          </FormControl>
-        </Grid>
-
-        <Grid item xs={12}>
-          <FormLabel component="legend">Halbach?</FormLabel>
-          <FormControlLabel
-            control={<Switch value={formVals.HALBACH} onChange={handleHalbachChange} name="HALBACH" />}
-            label={!showHalbachOptions ? "No" : "Yes"}
-          />
-        </Grid>
-
-        {showHalbachOptions ? halbachOptions : null}
-
-        <Grid item xs={12}>
-          <FormLabel component="legend">Back Iron?</FormLabel>
-          <FormControlLabel
-            control={<Switch value={formVals.BACK_IRON} onChange={handleBackIronChange} name="BACK_IRON" />}
-            label={!showBackIronOptions ? "No" : "Yes"}
-          />
-        </Grid>
-
-        {showBackIronOptions ? backIronOptions : null}
-
-        <Grid item xs={4}>
-          <FormControlLabel
-            filled="true"
-            control={<TextField onChange={handleInputChange} value={formVals.POLE_COUNT} name="POLE_COUNT" label="Pole Count" />}
-          />
-        </Grid>
-
-        <Grid item xs={4}>
-          <FormControlLabel
-            filled="true"
-            control={<TextField onChange={handleInputChange} value={formVals.AIR_GAP} name="AIR_GAP" label="Air Gap" />}
-          />
-        </Grid>
-
-        <Grid item xs={4}>
-          <FormControlLabel
-            filled="true"
-            control={<TextField onChange={handleInputChange} value={formVals.MAGNET_GAP} name="MAGNET_GAP" label="Magnet Spacing" />}
-          />
-        </Grid>
-
-        <Grid item xs={12}>
-          <FormLabel component="legend">Simulate Air Core?</FormLabel>
-          <FormControlLabel
-            control={<Switch value={formVals.CONDUCTOR} onChange={handleConductorChange} name="CONDUCTOR" />}
-            label={!showConductorOptions ? "No" : "Yes"}
-          />
-        </Grid>
-
-        {showConductorOptions ? conductorOptions : null}
 
       </Grid>
       <Grid container spacing={3}>
