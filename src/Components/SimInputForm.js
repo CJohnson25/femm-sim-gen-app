@@ -1,7 +1,7 @@
 import React from 'react';
 import { Grid, Typography, MenuItem, Button, Card, CardContent, FormControlLabel, FormControl, FormLabel, InputLabel, RadioGroup, Radio, Select, Switch, TextField } from '@material-ui/core';
 import { CopyToClipboard } from './CopyToClipboard'
-import { formInputToLuaScript, detectOs } from '../util'
+import { formInputToLuaScript } from '../util'
 
 
 export function SimInputForm() {
@@ -318,6 +318,12 @@ export function SimInputForm() {
                   <FormControlLabel
                     filled="true"
                     control={<TextField onChange={handleInputChange} value={formVals.NUM_ROTOR_POLE_PAIRS} name="NUM_ROTOR_POLE_PAIRS" label="# of Pole Pairs" />}
+                  />
+                </Grid>
+                <Grid item xs={6}>
+                  <FormControlLabel
+                    filled="true"
+                    control={<TextField onChange={handleInputChange} value={formVals.MAGNET_LENGTH} name="MAGNET_LENGTH" label="Magnet Length" />}
                   />
                 </Grid>
                 <Grid item xs={6}>
