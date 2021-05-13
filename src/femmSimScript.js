@@ -150,9 +150,9 @@ function get_phase_label(phase)
 end
 
 -- TODO make this use a look up table for diameters based on gague selected
-function get_coil_diameter()
-  return CONDUCTOR_DIAMETER
-end
+-- function get_coil_diameter()
+--   return CONDUCTOR_DIAMETER
+-- end
 
 function get_coil_gap()
   return get_pole_width() / NUM_PHASES
@@ -160,7 +160,11 @@ end
 
 function get_coil_offset(coil_num, phase)
   local phase_offset = get_phase_offset(phase)
-  return (coil_num * NUM_PHASES - phase_offset) * get_coil_gap() + get_pole_width() / 2
+  local total_offset = (coil_num * NUM_PHASES - phase_offset) * get_coil_gap() + get_pole_width() / 2
+  if RECTANGLE_CONDUCTOR == 1 then
+  total_offset = total_offset - CONDUCTOR_WIDTH / 2
+  end
+  return total_offset
 end
 
 function get_stator_pole_pairs()
@@ -310,18 +314,27 @@ function build_coil_phase(phase, starting_side)
 end
 
 function build_coil_leg(coil_num, phase, starting_side) 
-  local h = get_coil_diameter()
   -- local x = get_coil_offset(coil_num, phase) + get_h_gap()
   local x = get_coil_offset(coil_num, phase) + get_h_gap() + get_coil_gap() * 3
-  local y = get_v_gap() + get_tallest_magnet_height() + AIR_GAP - ROTOR_TO_STATOR_GAP - get_coil_diameter()
+  local y = get_v_gap() + get_tallest_magnet_height() + AIR_GAP - ROTOR_TO_STATOR_GAP - CONDUCTOR_DIAMETER
+  if RECTANGLE_CONDUCTOR == 1 then
+    local y = get_v_gap() + get_tallest_magnet_height() + AIR_GAP - ROTOR_TO_STATOR_GAP - CONDUCTOR_HEIGHT
+  end
   local turns = NUM_PHASE_TURNS
   if mod(starting_side, 2) == 1 then
     y = get_v_gap() + get_tallest_magnet_height() + ROTOR_TO_STATOR_GAP
     turns = turns * -1
   end
-
+  
   local circuit = get_phase_label(phase + 1)
-  build_circle_block(x, y, h, CONDUCTOR_MATERIAL, circuit, 0, 0, turns)
+  if RECTANGLE_CONDUCTOR == 1 then
+    local w = CONDUCTOR_WIDTH
+    local h = CONDUCTOR_HEIGHT
+    build_square_block(x, y, CONDUCTOR_WIDTH, CONDUCTOR_HEIGHT, CONDUCTOR_MATERIAL, circuit, 0, 0, turns, "center")
+  else 
+    local h = CONDUCTOR_DIAMETER
+    build_circle_block(x, y, h, CONDUCTOR_MATERIAL, circuit, 0, 0, turns)
+  end
 end
 
 function build_analysis_nodes () 
