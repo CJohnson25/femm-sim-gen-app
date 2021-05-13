@@ -13,15 +13,15 @@ export function formInputToLuaScript(formVals) {
 export function detectOs() {
   var detectOS = ""
 
-  if (navigator.appVersion.indexOf("Win") != -1) {
+  if (navigator.appVersion.indexOf("Win") !== -1) {
     detectOS = "windows"
   }
 
-  if (navigator.appVersion.indexOf("Mac") != -1) {
+  if (navigator.appVersion.indexOf("Mac") !== -1) {
     detectOS = "mac"
   }
 
-  if (navigator.appVersion.indexOf("Linux") != -1) {
+  if (navigator.appVersion.indexOf("Linux") !== -1) {
     detectOS = "linux"
   }
 }
