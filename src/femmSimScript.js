@@ -1,9 +1,11 @@
 export const femmSimScript = `
+
+
 function init () 
   -- Create Doc
   newdocument(0)
   -- Init Problem
-  mi_probdef(0, UNITS, "planar", 1e-008, get_tallest_magnet_height() * 2 + AIR_GAP)
+  mi_probdef(0, UNITS, "planar", 1e-008, MAGNET_LENGTH)
   -- Init Grid
   mi_showgrid()
   mi_setgrid(0.001, "cart")
@@ -13,17 +15,24 @@ function init ()
   build_objects()
 
   mi_zoomnatural()
+  
+  if ANALYSIS == 1 then 
+    analyze()
+  end
+
 end
 
 function init_materials()
   mi_getmaterial("Air")
-  mi_getmaterial(IRON_MATERIAL)
+  mi_getmaterial(BACK_IRON_MATERIAL)
   mi_getmaterial(MAGNET_GRADE)
   if HALBACH == 1 then
     mi_getmaterial(HALBACH_GRADE)
   end
 
-  mi_getmaterial(CONDUCTOR_MATERIAL)
+  if STATOR == 1 then
+    mi_getmaterial(CONDUCTOR_MATERIAL)
+  end
 end
 
 function init_circuits() 
@@ -35,7 +44,9 @@ function init_circuits()
   end
 end
 
-
+function get_full_filepath()
+  return FILEPATH .. FILENAME
+end
 
 function get_v_gap () 
   return get_total_height() * 2
@@ -108,11 +119,11 @@ function get_total_height ()
 end
 
 function get_halbach_count() 
-  return POLE_COUNT
+  return NUM_ROTOR_POLE_PAIRS * 2
 end
 
 function get_nonhalbach_count() 
-  return POLE_COUNT + 1 
+  return NUM_ROTOR_POLE_PAIRS * 2 + 1 
 end
 
 function get_total_magnet_count ()
@@ -152,8 +163,16 @@ function get_coil_offset(coil_num, phase)
   return (coil_num * NUM_PHASES - phase_offset) * get_coil_gap() + get_pole_width() / 2
 end
 
+function get_stator_pole_pairs()
+  return NUM_ROTOR_POLE_PAIRS - 1
+end
+
 function get_total_coils() 
-  return NUM_PHASES * NUM_PHASE_COILS
+  return NUM_PHASES * get_stator_pole_pairs()
+end
+
+function get_total_phase_legs() 
+  return get_stator_pole_pairs() * 2
 end
 
 function get_total_legs() 
@@ -169,7 +188,7 @@ function build_objects ()
   build_rotor(0)
   build_rotor(1)
   
-  if CONDUCTOR == 1 then
+  if STATOR == 1 then
     build_coil_phases()
   end
 
@@ -243,9 +262,9 @@ function build_rotor_magnets (side)
     end
 
     -- First or last iteration are half magnets
-    if i == 0 or i == count - 1 then
+    if i == 0 or i == (count - 1) then
       is_end = 1
-      width = width/2
+      width = width / 2
     end
 
     build_magnet(current_x_offset, current_y_offset, direction, is_halbach, is_end)
@@ -265,14 +284,14 @@ function build_magnet (x, y, direction, is_halbach, is_end)
   end 
 
   if is_end == 1 then
-    w = w/2
+    w = w / 2
   end
 
   build_square_block(x, y, w, h, grade, "", direction, 0, 0, "center")
 end
 
 function build_rotor_iron (x, y)
-  build_square_block(x, y, get_total_width(), BACK_IRON_HEIGHT, IRON_MATERIAL, "", 0, 0, 0, "center")
+  build_square_block(x, y, get_total_width(), BACK_IRON_HEIGHT, BACK_IRON_MATERIAL, "", 0, 0, 0, "center")
 end
 
 function build_coil_phases()
@@ -284,7 +303,7 @@ function build_coil_phases()
 end
 
 function build_coil_phase(phase, starting_side)
-  for i = 0, (NUM_PHASE_COILS * 2) - 1 do
+  for i = 0, get_total_phase_legs() - 1 do
     build_coil_leg(i, phase, starting_side)
     starting_side = starting_side + 1
   end
@@ -295,7 +314,7 @@ function build_coil_leg(coil_num, phase, starting_side)
   -- local x = get_coil_offset(coil_num, phase) + get_h_gap()
   local x = get_coil_offset(coil_num, phase) + get_h_gap() + get_coil_gap() * 3
   local y = get_v_gap() + get_tallest_magnet_height() + AIR_GAP - ROTOR_TO_STATOR_GAP - get_coil_diameter()
-  local turns = NUM_TURNS
+  local turns = NUM_PHASE_TURNS
   if mod(starting_side, 2) == 1 then
     y = get_v_gap() + get_tallest_magnet_height() + ROTOR_TO_STATOR_GAP
     turns = turns * -1
@@ -308,7 +327,7 @@ end
 function build_analysis_nodes () 
   local x = get_h_gap()
   local x1 = x + get_total_width()
-  local y = get_v_gap() + AIR_GAP/2 + MAGNET_HEIGHT
+  local y = get_v_gap() + AIR_GAP / 2 + MAGNET_HEIGHT
   
   mi_addnode(x, y)
   mi_addnode(x1, y)
@@ -362,6 +381,15 @@ function add_block_props(labelX, labelY, material, circuit, direction, group, tu
   mi_selectlabel(labelX, labelY)
   mi_setblockprop(material, 1, 0, circuit, direction, group, turns)
   mi_clearselected()
+end
+
+
+
+function analyze()
+  mi_saveas(get_full_filepath())
+  mi_analyze()
+  mi_loadsolution()
+  mo_showdensityplot(1, 0, 1, 0, "bmag")
 end
 
 init()
