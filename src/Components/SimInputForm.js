@@ -31,7 +31,8 @@ export function SimInputForm() {
     NUM_PHASE_COILS: 3,
     NUM_PHASES: 3,
     NUM_TURNS: 4,
-    ROTOR_TO_STATOR_GAP: 1
+    ROTOR_TO_STATOR_GAP: 1,
+    PEAK_CURRENT: 10,
   }
 
   const [formVals, setFormVals] = React.useState(defaultVals)
@@ -133,12 +134,19 @@ export function SimInputForm() {
             control={<TextField onChange={handleInputChange} value={formVals.NUM_TURNS} name="NUM_TURNS" label="# of Turns per Phase" />}
           />
         </Grid>
-        <Grid item xs={12}>
+        <Grid item xs={6}>
           <FormControlLabel
             filled="true"
             control={<TextField onChange={handleInputChange} value={formVals.ROTOR_TO_STATOR_GAP} name="ROTOR_TO_STATOR_GAP" label="Rotor to Stator Air Gap" />}
           />
         </Grid>
+        <Grid item xs={6}>
+          <FormControlLabel
+            filled="true"
+            control={<TextField onChange={handleInputChange} value={formVals.PEAK_CURRENT} name="PEAK_CURRENT" label="Peak Current" />}
+          />
+        </Grid>
+        
       </>
     )
   }

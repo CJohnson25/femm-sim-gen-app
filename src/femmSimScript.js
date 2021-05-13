@@ -1,51 +1,41 @@
 export const femmSimScript = `
 function init () 
   -- Create Doc
-  showconsole()
   newdocument(0)
-
   -- Init Problem
-  mi_probdef(0, UNITS, "planar", 1e-008)
-
+  mi_probdef(0, UNITS, "planar", 1e-008, get_tallest_magnet_height() * 2 + AIR_GAP)
   -- Init Grid
   mi_showgrid()
   mi_setgrid(0.001, "cart")
 
-  -- Add materials
-  mi_getmaterial("Air")
-  mi_getmaterial(IRON_MATERIAL)
-  mi_getmaterial(MAGNET_GRADE)
-  mi_getmaterial(CONDUCTOR_MATERIAL)
-  if HALBACH == 1 then
-    mi_getmaterial(HALBACH_GRADE)
-  end
-
-  -- Add Circuits
-  for i = 1, NUM_PHASES do
-    local phase_label = get_phase_label(i)
-    local current = get_phase_current(i)
-    local circuit_type = 1 -- 1 for series 0 for paralell
-    mi_addcircprop(phase_label, current, circuit_type)
-  end
-
+  init_materials()
+  init_circuits() 
   build_objects()
 
   mi_zoomnatural()
 end
 
-function get_phase_current(phase)
-  if phase == 1 then
-    return 32
-  elseif phase == 2 then
-    return 27.71
-  else
-    return -27.71
+function init_materials()
+  mi_getmaterial("Air")
+  mi_getmaterial(IRON_MATERIAL)
+  mi_getmaterial(MAGNET_GRADE)
+  if HALBACH == 1 then
+    mi_getmaterial(HALBACH_GRADE)
+  end
+
+  mi_getmaterial(CONDUCTOR_MATERIAL)
+end
+
+function init_circuits() 
+  for i = 1, NUM_PHASES do
+    local phase_label = get_phase_label(i)
+    local current = get_phase_current(i)
+    local circuit_type = 1 -- 1 for series 0 for parallel
+    mi_addcircprop(phase_label, current, circuit_type)
   end
 end
 
-function get_phase_label(phase) 
-  return "Phase " .. tostring(phase)
-end
+
 
 function get_v_gap () 
   return get_total_height() * 2
@@ -135,23 +125,31 @@ function get_total_magnet_count ()
   return count
 end
 
+function get_phase_offset(phase)
+  return mod(phase, NUM_PHASES)
+end
+
+function get_phase_current(phase)
+  local angle = 360 / NUM_PHASES
+  return PEAK_CURRENT * sin(rad((phase - 1) * angle))
+end
+
+function get_phase_label(phase) 
+  return "Phase " .. tostring(phase)
+end
+
 -- TODO make this use a look up table for diameters based on gague selected
 function get_coil_diameter()
   return CONDUCTOR_DIAMETER
 end
 
-function get_phase_offset(phase)
-  return mod(phase, NUM_PHASES)
-end
-
 function get_coil_gap()
-  local legs = get_total_legs()
-  return  get_total_width() / legs
+  return get_pole_width() / NUM_PHASES
 end
 
 function get_coil_offset(coil_num, phase)
   local phase_offset = get_phase_offset(phase)
-  return (coil_num * NUM_PHASES - phase_offset) * get_coil_gap()
+  return (coil_num * NUM_PHASES - phase_offset) * get_coil_gap() + get_pole_width() / 2
 end
 
 function get_total_coils() 
@@ -162,35 +160,7 @@ function get_total_legs()
   return get_total_coils() * 2
 end
 
-function build_coil_leg(coil_num, phase, starting_side) 
-  local h = get_coil_diameter()
-  local x = get_coil_offset(coil_num, phase) + get_h_gap() + get_coil_gap() * 2
-  local y = get_v_gap() + get_tallest_magnet_height() + AIR_GAP - ROTOR_TO_STATOR_GAP - get_coil_diameter()
-  local turns = NUM_TURNS
-  if mod(starting_side, 2) == 1 then
-    y = get_v_gap() + get_tallest_magnet_height() + ROTOR_TO_STATOR_GAP
-    turns = turns * -1
-  end
 
-  local circuit = get_phase_label(phase + 1)
-  build_circle_block(x, y, h, CONDUCTOR_MATERIAL, circuit, 0, 0, turns)
-end
-
-function build_coil_phase(phase, starting_side)
-  for i = 0, (NUM_PHASE_COILS * 2) - 1 do
-    build_coil_leg(i, phase, starting_side)
-    starting_side = starting_side + 1
-  end
-end
-
-function build_coil_phases()
-  local starting_side = 0
-  for i = 0, NUM_PHASES - 1 do
-    build_coil_phase(i, starting_side)
-    starting_side = starting_side + 1
-  end
-  
-end
 
 
 function build_objects ()
@@ -260,11 +230,7 @@ function build_rotor_magnets (side)
       is_halbach = 1
       width = HALBACH_WIDTH
       if side == 1 then
-      print("test")
-      print(not is_halbach_taller())
-      if is_halbach_taller() == 0 then
-      print("test2")
-      print(height_diff)
+        if is_halbach_taller() == 0 then
           current_y_offset = current_y_offset + height_diff
         end
       end
@@ -305,10 +271,52 @@ function build_magnet (x, y, direction, is_halbach, is_end)
   build_square_block(x, y, w, h, grade, "", direction, 0, 0, "center")
 end
 
-
 function build_rotor_iron (x, y)
   build_square_block(x, y, get_total_width(), BACK_IRON_HEIGHT, IRON_MATERIAL, "", 0, 0, 0, "center")
 end
+
+function build_coil_phases()
+  local starting_side = 0
+  for i = 0, NUM_PHASES - 1 do
+    build_coil_phase(i, starting_side)
+    starting_side = starting_side + 1
+  end
+end
+
+function build_coil_phase(phase, starting_side)
+  for i = 0, (NUM_PHASE_COILS * 2) - 1 do
+    build_coil_leg(i, phase, starting_side)
+    starting_side = starting_side + 1
+  end
+end
+
+function build_coil_leg(coil_num, phase, starting_side) 
+  local h = get_coil_diameter()
+  local x = get_coil_offset(coil_num, phase) + get_h_gap()
+  -- local x = get_coil_offset(coil_num, phase) + get_h_gap() + get_coil_gap() * 2
+  local y = get_v_gap() + get_tallest_magnet_height() + AIR_GAP - ROTOR_TO_STATOR_GAP - get_coil_diameter()
+  local turns = NUM_TURNS
+  if mod(starting_side, 2) == 1 then
+    y = get_v_gap() + get_tallest_magnet_height() + ROTOR_TO_STATOR_GAP
+    turns = turns * -1
+  end
+
+  local circuit = get_phase_label(phase + 1)
+  build_circle_block(x, y, h, CONDUCTOR_MATERIAL, circuit, 0, 0, turns)
+end
+
+function build_analysis_nodes () 
+  local x = get_h_gap()
+  local x1 = x + get_total_width()
+  local y = get_v_gap() + AIR_GAP/2 + MAGNET_HEIGHT
+  
+  mi_addnode(x, y)
+  mi_addnode(x1, y)
+end
+
+
+
+
 
 function build_circle_block(x, y, h, material, circuit, direction, group, turns)
   local y1 = y + h
@@ -354,20 +362,6 @@ function add_block_props(labelX, labelY, material, circuit, direction, group, tu
   mi_selectlabel(labelX, labelY)
   mi_setblockprop(material, 1, 0, circuit, direction, group, turns)
   mi_clearselected()
-end
-
-function build_analysis_nodes () 
-  local x = get_h_gap()
-  local x1 = x + get_total_width()
-  local y = get_v_gap() + AIR_GAP/2 + MAGNET_HEIGHT
-  
-  mi_addnode(x, y)
-  mi_addnode(x1, y)
-end
-
-
-function analyze_problem ()
-  
 end
 
 init()
