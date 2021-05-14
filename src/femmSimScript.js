@@ -318,7 +318,7 @@ function build_coil_leg(coil_num, phase, starting_side)
   local x = get_coil_offset(coil_num, phase) + get_h_gap() + get_coil_gap() * 3
   local y = get_v_gap() + get_tallest_magnet_height() + AIR_GAP - ROTOR_TO_STATOR_GAP - CONDUCTOR_DIAMETER
   if RECTANGLE_CONDUCTOR == 1 then
-    local y = get_v_gap() + get_tallest_magnet_height() + AIR_GAP - ROTOR_TO_STATOR_GAP - CONDUCTOR_HEIGHT
+    y = get_v_gap() + get_tallest_magnet_height() + AIR_GAP - ROTOR_TO_STATOR_GAP - CONDUCTOR_HEIGHT
   end
   local turns = NUM_PHASE_TURNS
   if mod(starting_side, 2) == 1 then
