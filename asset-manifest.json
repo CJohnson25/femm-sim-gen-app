@@ -1,26 +1,22 @@
 {
   "files": {
-    "main.css": "/femm-sim-gen-app/static/css/main.c0facf03.chunk.css",
-    "main.js": "/femm-sim-gen-app/static/js/main.7eb75e3d.chunk.js",
-    "main.js.map": "/femm-sim-gen-app/static/js/main.7eb75e3d.chunk.js.map",
-    "runtime-main.js": "/femm-sim-gen-app/static/js/runtime-main.fa7dac26.js",
-    "runtime-main.js.map": "/femm-sim-gen-app/static/js/runtime-main.fa7dac26.js.map",
-    "static/css/2.a60f5b2e.chunk.css": "/femm-sim-gen-app/static/css/2.a60f5b2e.chunk.css",
-    "static/js/2.25d45981.chunk.js": "/femm-sim-gen-app/static/js/2.25d45981.chunk.js",
-    "static/js/2.25d45981.chunk.js.map": "/femm-sim-gen-app/static/js/2.25d45981.chunk.js.map",
-    "static/js/3.46abf896.chunk.js": "/femm-sim-gen-app/static/js/3.46abf896.chunk.js",
-    "static/js/3.46abf896.chunk.js.map": "/femm-sim-gen-app/static/js/3.46abf896.chunk.js.map",
+    "main.css": "/femm-sim-gen-app/static/css/main.229d0cf6.chunk.css",
+    "main.js": "/femm-sim-gen-app/static/js/main.834c3656.chunk.js",
+    "main.js.map": "/femm-sim-gen-app/static/js/main.834c3656.chunk.js.map",
+    "runtime-main.js": "/femm-sim-gen-app/static/js/runtime-main.66dcc40e.js",
+    "runtime-main.js.map": "/femm-sim-gen-app/static/js/runtime-main.66dcc40e.js.map",
+    "static/js/2.30fd1922.chunk.js": "/femm-sim-gen-app/static/js/2.30fd1922.chunk.js",
+    "static/js/2.30fd1922.chunk.js.map": "/femm-sim-gen-app/static/js/2.30fd1922.chunk.js.map",
+    "static/js/3.dd2bd55d.chunk.js": "/femm-sim-gen-app/static/js/3.dd2bd55d.chunk.js",
+    "static/js/3.dd2bd55d.chunk.js.map": "/femm-sim-gen-app/static/js/3.dd2bd55d.chunk.js.map",
     "index.html": "/femm-sim-gen-app/index.html",
-    "static/css/2.a60f5b2e.chunk.css.map": "/femm-sim-gen-app/static/css/2.a60f5b2e.chunk.css.map",
-    "static/css/main.c0facf03.chunk.css.map": "/femm-sim-gen-app/static/css/main.c0facf03.chunk.css.map",
-    "static/js/2.25d45981.chunk.js.LICENSE.txt": "/femm-sim-gen-app/static/js/2.25d45981.chunk.js.LICENSE.txt",
-    "static/media/index.css": "/femm-sim-gen-app/static/media/roboto-vietnamese-400-normal.52cebac0.woff2"
+    "static/css/main.229d0cf6.chunk.css.map": "/femm-sim-gen-app/static/css/main.229d0cf6.chunk.css.map",
+    "static/js/2.30fd1922.chunk.js.LICENSE.txt": "/femm-sim-gen-app/static/js/2.30fd1922.chunk.js.LICENSE.txt"
   },
   "entrypoints": [
-    "static/js/runtime-main.fa7dac26.js",
-    "static/css/2.a60f5b2e.chunk.css",
-    "static/js/2.25d45981.chunk.js",
-    "static/css/main.c0facf03.chunk.css",
-    "static/js/main.7eb75e3d.chunk.js"
+    "static/js/runtime-main.66dcc40e.js",
+    "static/js/2.30fd1922.chunk.js",
+    "static/css/main.229d0cf6.chunk.css",
+    "static/js/main.834c3656.chunk.js"
   ]
 }
