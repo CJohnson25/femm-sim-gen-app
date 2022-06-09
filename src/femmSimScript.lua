@@ -1,4 +1,48 @@
-export const femmSimScript = `
+UNITS = "millimeters"
+NUM_ROTOR_POLE_PAIRS = 3
+MAGNET_GAP = 1
+MAGNET_LENGTH = 1
+MAGNET_WIDTH = 2
+MAGNET_HEIGHT = 1
+MAGNET_GRADE = "N50"
+HALBACH = 1
+HALBACH_LENGTH = 1
+HALBACH_WIDTH = 1
+HALBACH_HEIGHT = 1
+HALBACH_GRADE = "N50"
+BACK_IRON = 1
+BACK_IRON_HEIGHT = 1
+BACK_IRON_MATERIAL = "1006 Steel"
+AIR_GAP = 10
+STATOR = 1
+STATOR_HEIGHT = 4
+RECTANGLE_CONDUCTOR = 0
+CONDUCTOR_GAP = 1
+CONDUCTOR_WIDTH = 1
+CONDUCTOR_HEIGHT = 1
+CONDUCTOR_DIAMETER = 2
+CONDUCTOR_MATERIAL = "32 AWG"
+PEAK_CURRENT = 10
+ROTOR_TO_STATOR_GAP = 1
+NUM_PHASES = 3
+NUM_PHASE_TURNS = 4
+ANALYSIS = 0
+FILEPATH = ""
+FILENAME = ""
+
+-- TODO - Allow wire gauge to overide RECTANGLE_CONDUCTOR and CONDUCTOR_DIAMETER
+-- TODO - Add validation to suggest values
+-- TODO - add collision detection
+-- TODO - add preview using JS/CSS
+
+-- TODO - export results somehow
+  -- TODO - run a bunch of tests
+-- TODO - multiple cross sections across rotor diameter
+---- TODO wedge magnets
+
+-- TODO - various winding patterns
+
+
 function init() 
   -- Create Doc
   newdocument(0)
@@ -511,4 +555,3 @@ function analyze()
 end
 
 init()
-`
