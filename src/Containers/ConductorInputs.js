@@ -1,22 +1,32 @@
 import React from 'react'
-import { Grid, Typography, Alert } from '@mui/material'
+import PropTypes from 'prop-types'
+
+import { Grid, Alert, InputAdornment } from '@mui/material'
+
 import { SimpleTextField } from '../Components/SimpleTextField'
 import { SimpleSelect } from '../Components/SimpleSelect'
-import { RectConductorInputs } from './RectConductorInputs'
-import { CircleCondInputs } from './CircleCondInputs'
-import { wireGauges } from '../util'
 import { ContainerToggle } from '../Components/ContainerToggle'
 
+import { RectConductorInputs } from './RectConductorInputs'
+import { CircleCondInputs } from './CircleCondInputs'
+
+import { wireGauges } from '../util'
+import { GridRow } from './GridRow'
+import { GridCol } from './GridCol'
+import { useUnitAdormentLabel } from '../hooks'
+
 export function ConductorInputs({ control }) {
+  const {label: unitLabel} = useUnitAdormentLabel(control)
+
   return (
-    <Grid container spacing={4} justifyContent="center">
-      <Grid item xs={12}>
+    <GridCol>
+      <Grid item>
         <Alert severity="info">
           Currently this will only simulate 3 phase designs wiith overlapped
           windings.
         </Alert>
       </Grid>
-      <Grid item xs={12}>
+      <Grid item>
         <ContainerToggle
           label="Rectangle conductor?"
           childrenShowFalse={<CircleCondInputs control={control} />}
@@ -24,12 +34,12 @@ export function ConductorInputs({ control }) {
           <RectConductorInputs control={control} />
         </ContainerToggle>
       </Grid>
-      <Grid container spacing={2} item xs={12}>
+      <GridRow item>
         <Grid item xs={4}>
           <SimpleTextField
             control={control}
             name="NUM_PHASE_TURNS"
-            label="# of Turns per Phase"
+            label="Turns per Phase"
           />
         </Grid>
         <Grid item xs={4}>
@@ -37,6 +47,7 @@ export function ConductorInputs({ control }) {
             control={control}
             name="ROTOR_TO_STATOR_GAP"
             label="Rotor to Stator Air Gap"
+            InputProps={{endAdornment: <InputAdornment position="end">{unitLabel}</InputAdornment>}}
           />
         </Grid>
         <Grid item xs={4}>
@@ -44,10 +55,11 @@ export function ConductorInputs({ control }) {
             control={control}
             name="PEAK_CURRENT"
             label="Peak Current"
+            InputProps={{endAdornment: <InputAdornment position="end">A</InputAdornment>}}
           />
         </Grid>
-      </Grid>
-      <Grid item xs={6}>
+      </GridRow>
+      <Grid item>
         <SimpleSelect
           label="Wire Gauge"
           control={control}
@@ -55,6 +67,10 @@ export function ConductorInputs({ control }) {
           options={wireGauges}
         />
       </Grid>
-    </Grid>
+    </GridCol>
   )
+}
+
+ConductorInputs.propTypes = {
+  control: PropTypes.object
 }

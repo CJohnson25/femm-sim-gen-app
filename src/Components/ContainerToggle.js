@@ -1,4 +1,6 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
 import { Grid, FormControlLabel, Switch, FormLabel } from '@mui/material'
 
 export function ContainerToggle({ label, children, childrenShowFalse = null }) {
@@ -23,4 +25,10 @@ export function ContainerToggle({ label, children, childrenShowFalse = null }) {
       </Grid>
     </Grid>
   )
+}
+
+ContainerToggle.propTypes = {
+  label: PropTypes.string,
+  children: PropTypes.any,
+  childrenShowFalse: PropTypes.object
 }

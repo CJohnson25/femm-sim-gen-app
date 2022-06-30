@@ -3,7 +3,7 @@ NUM_ROTOR_POLE_PAIRS = 3
 MAGNET_GAP = 1
 MAGNET_LENGTH = 1
 MAGNET_WIDTH = 2
-MAGNET_HEIGHT = 1
+MAGNET_HEIGHT = 2
 MAGNET_GRADE = "N50"
 HALBACH = 1
 HALBACH_LENGTH = 1
@@ -34,6 +34,7 @@ FILENAME = ""
 -- TODO - Add validation to suggest values
 -- TODO - add collision detection
 -- TODO - add preview using JS/CSS
+-- TODO - allow magnets to be all on same plane (rotor plane, or magnet face plane)
 
 -- TODO - export results somehow
   -- TODO - run a bunch of tests
@@ -41,6 +42,8 @@ FILENAME = ""
 ---- TODO wedge magnets
 
 -- TODO - various winding patterns
+
+-- TODO info hover tips
 
 
 function init() 

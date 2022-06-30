@@ -1,5 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
 import { Grid, Typography, Button, TextField } from '@mui/material'
+
 import { CopyToClipboard } from './CopyToClipboard'
 
 export function CopyScriptButton({ outputText }) {
@@ -30,4 +33,8 @@ export function CopyScriptButton({ outputText }) {
       </Grid>
     </Grid>
   )
+}
+
+CopyScriptButton.propTypes = {
+  outputText: PropTypes.string
 }

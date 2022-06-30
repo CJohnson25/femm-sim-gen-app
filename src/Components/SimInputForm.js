@@ -1,11 +1,16 @@
 import React from 'react'
-import { Grid, Typography, Card, CardContent } from '@mui/material'
-import { CopyScriptButton } from './CopyScriptButton'
-import { formInputToLuaScript } from '../util'
+import PropTypes from 'prop-types'
+
 import { useForm } from 'react-hook-form'
+import { Grid, Typography } from '@mui/material'
+
+import { CopyScriptButton } from './CopyScriptButton'
+
 import { RotorInputs } from '../Containers/RotorInputs'
 import { GeneralInputs } from '../Containers/GeneralInputs'
 import { StatorInputs } from '../Containers/StatorInputs'
+
+import { formInputToLuaScript } from '../util'
 
 export function SimInputForm() {
   // const stringInputFields = [
@@ -76,24 +81,7 @@ export function SimInputForm() {
   // }
 
   return (
-    <Grid container spacing={5}>
-      <Grid item xs={12} container spacing={2} justifyContent="center">
-        <Grid item xs={12}>
-          <Typography variant="h2">Motor Sim Generator</Typography>
-        </Grid>
-        <Grid item xs={8}>
-          <Typography>
-            This form will generate a LUA script that can then be run in FEMM to
-            produce a 2D simulation of a 3 phase air-cored toroidially wound
-            axial flux permanant magnet motor.
-          </Typography>
-          <Typography>
-            This is still a work in progress and will hopefully support other
-            motor architechtures in the future.
-          </Typography>
-        </Grid>
-      </Grid>
-
+    <Grid item container spacing={5}>
       <Grid item xs={12} lg={4}>
         <GeneralInputs control={control} />
       </Grid>

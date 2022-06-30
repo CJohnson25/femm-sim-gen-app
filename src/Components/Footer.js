@@ -1,32 +1,24 @@
+import React from 'react'
+
+import { Grid, Typography } from '@mui/material'
 import YouTubeIcon from '@mui/icons-material/YouTube'
 import GitHubIcon from '@mui/icons-material/GitHub'
+
 import pjson from '../../package.json'
-import { Grid, IconButton, Typography } from '@mui/material'
+import { GridRow } from '../Containers/GridRow'
+import { GITHUB_URL, YOUTUBE_URL } from '../util'
+import { FooterIcon } from '../Containers/FooterIcon'
 
 export function Footer() {
   return (
-    <Grid container style={{ marginTop: 20 }} justifyContent="space-between">
+    <GridRow item style={{ marginTop: 20 }} justifyContent="space-between">
       <Grid item>
         <Typography>Version: {pjson.version}</Typography>
       </Grid>
       <Grid item>
-        <IconButton
-          target="_blank"
-          variant="contained"
-          color="primary"
-          href="https://www.youtube.com/channel/UCQk0CkSexTb7GQvpGxj4kxw"
-        >
-          <YouTubeIcon />
-        </IconButton>
-        <IconButton
-          target="_blank"
-          variant="contained"
-          color="primary"
-          href="https://github.com/CJohnson25/femm-sim-gen-app/"
-        >
-          <GitHubIcon />
-        </IconButton>
+        <FooterIcon Icon={YouTubeIcon} href={YOUTUBE_URL} />
+        <FooterIcon Icon={GitHubIcon} href={GITHUB_URL} />
       </Grid>
-    </Grid>
+    </GridRow>
   )
 }

@@ -1,15 +1,23 @@
 import React from 'react'
-import { Grid } from '@mui/material'
+import PropTypes from 'prop-types'
+
+import { Grid, InputAdornment } from '@mui/material'
+
 import { SimpleTextField } from '../Components/SimpleTextField'
+import { GridRow } from './GridRow'
+import { useUnitAdormentLabel } from '../hooks'
 
 export function RectConductorInputs({ control }) {
+  const {label: unitLabel} = useUnitAdormentLabel(control)
+
   return (
-    <Grid container spacing={2}>
+    <GridRow>
       <Grid item xs={6}>
         <SimpleTextField
           control={control}
           name="CONDUCTOR_WIDTH"
           label="Conductor Width"
+          InputProps={{endAdornment: <InputAdornment position="end">{unitLabel}</InputAdornment>}}
         />
       </Grid>
       <Grid item xs={6}>
@@ -17,8 +25,13 @@ export function RectConductorInputs({ control }) {
           control={control}
           name="CONDUCTOR_HEIGHT"
           label="Conductor Height"
+          InputProps={{endAdornment: <InputAdornment position="end">{unitLabel}</InputAdornment>}}
         />
       </Grid>
-    </Grid>
+    </GridRow>
   )
+}
+
+RectConductorInputs.propTypes = {
+  control: PropTypes.object
 }

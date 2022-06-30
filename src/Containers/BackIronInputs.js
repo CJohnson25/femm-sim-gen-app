@@ -1,20 +1,29 @@
 import React from 'react'
-import { Grid } from '@mui/material'
+import PropTypes from 'prop-types'
+
+import { Grid, InputAdornment } from '@mui/material'
+
 import { SimpleTextField } from '../Components/SimpleTextField'
 import { SimpleSelect } from '../Components/SimpleSelect'
-import { ironTypes } from '../util'
+
+import { getUnits, ironTypes } from '../util'
+import { GridRow } from './GridRow'
+import { useUnitAdormentLabel } from '../hooks'
 
 export function BackIronInputs({ control }) {
+  const {label: unitLabel} = useUnitAdormentLabel(control)
+
   return (
-    <Grid container spacing={2} alignItems="flex-end">
-      <Grid item xs={6}>
+    <GridRow>
+      <Grid item>
         <SimpleTextField
           control={control}
           name="BACK_IRON_HEIGHT"
           label="Back Iron Height"
+          InputProps={{endAdornment: <InputAdornment position="end">{unitLabel}</InputAdornment>}}
         />
       </Grid>
-      <Grid item xs={6}>
+      <Grid item>
         <SimpleSelect
           label="Iron Material"
           control={control}
@@ -22,6 +31,10 @@ export function BackIronInputs({ control }) {
           options={ironTypes}
         />
       </Grid>
-    </Grid>
+    </GridRow>
   )
+}
+
+BackIronInputs.propTypes = {
+  control: PropTypes.object
 }

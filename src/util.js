@@ -1,5 +1,8 @@
 import { femmSimScript } from './femmSimScript'
 
+export const YOUTUBE_URL = 'https://www.youtube.com/channel/UCQk0CkSexTb7GQvpGxj4kxw'
+export const GITHUB_URL = 'https://github.com/CJohnson25/femm-sim-gen-app/'
+
 export function formInputToLuaScript(formVals) {
   const stringifiedVals = JSON.stringify(formVals, null, 2)
   const sani = stringifiedVals.replace(/^{\n?|\n?}$/g, '')
@@ -65,3 +68,20 @@ export const wireGauges = [
   '34 AWG',
   '36 AWG'
 ]
+
+export const windingTypes = [
+  'Toroidal - Distributed',
+  'Serpentine - Distributed',
+]
+
+export const getUnits = (unit) => {
+  const unitsMeta = {
+    millimeters: {
+      label: 'mm'
+    },
+    inches: {
+      label: 'in'
+    }
+  }
+  return unitsMeta?.[unit]
+}

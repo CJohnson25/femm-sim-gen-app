@@ -1,6 +1,8 @@
 import React from 'react'
-import { MenuItem, Select, Typography } from '@mui/material'
+import PropTypes from 'prop-types'
+
 import { Controller } from 'react-hook-form'
+import { MenuItem, Select, Typography } from '@mui/material'
 
 export function SimpleSelect({ control, name, options, label }) {
   const getSelectOptions = () => {
@@ -27,4 +29,11 @@ export function SimpleSelect({ control, name, options, label }) {
       )}
     />
   )
+}
+
+SimpleSelect.propTypes = {
+  name: PropTypes.string,
+  control: PropTypes.object,
+  label: PropTypes.string,
+  options: PropTypes.array
 }

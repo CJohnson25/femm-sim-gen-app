@@ -1,5 +1,8 @@
 import React from 'react'
+import PropTypes from 'prop-types'
+
 import copy from 'clipboard-copy'
+
 import Tooltip from '@mui/material/Tooltip'
 
 export function CopyToClipboard({ children }) {
@@ -24,4 +27,8 @@ export function CopyToClipboard({ children }) {
       {children({ copy: onCopy })}
     </Tooltip>
   )
+}
+
+CopyToClipboard.propTypes = {
+  children: PropTypes.any
 }
