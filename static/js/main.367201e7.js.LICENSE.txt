@@ -6,6 +6,8 @@ object-assign
 
 /*! clipboard-copy. MIT License. Feross Aboukhadijeh <https://feross.org/opensource> */
 
+/*! regenerator-runtime -- Copyright (c) 2014-present, Facebook, Inc. -- license (MIT): https://github.com/facebook/regenerator/blob/main/LICENSE */
+
 /** @license MUI v5.4.1
  *
  * This source code is licensed under the MIT license found in the
