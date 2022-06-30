@@ -1,20 +1,23 @@
-import './App.css';
-import 'fontsource-roboto';
-import React from 'react';
-import { Container, Divider } from '@material-ui/core';
+import './App.css'
+import React from 'react'
+import { Container, Grid } from '@mui/material'
+
 import { SimInputForm } from './Components/SimInputForm'
 import { Footer } from './Components/Footer'
+import { Header } from './Components/Header'
 
 function App() {
   return (
     <div className="App">
-      <Container maxWidth="md">
-        <SimInputForm />
+      <Container >
+        <Grid container spacing={5} direction="column" alignItems="center">
+          <Header />
+          <SimInputForm />
+          <Footer />
+        </Grid>
       </Container>
-      <Divider style={{ marginTop: 40 }} />
-      <Footer />
     </div>
-  );
+  )
 }
 
-export default App;
+export default App
