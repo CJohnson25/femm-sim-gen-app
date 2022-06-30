@@ -1,7 +1,7 @@
 {
   "name": "femm-sim-gen-app",
   "homepage": "http://CJohnson25.github.io/femm-sim-gen-app",
-  "version": "0.11.1",
+  "version": "0.12.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.7.1",
