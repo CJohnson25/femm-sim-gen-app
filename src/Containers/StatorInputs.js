@@ -1,29 +1,29 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
-import { Grid } from '@mui/material'
+import { Alert, Grid } from '@mui/material'
 
 import { ConductorInputs } from './ConductorInputs'
 import { WindingTypeInputs } from './WindingTypeInputs'
 import { LabeLBig } from './LabeLBig'
 import { GridCol } from './GridCol'
 
-export function StatorInputs({ control }) {
+export function StatorInputs() {
   return (
     <GridCol>
       <Grid item>
         <LabeLBig>Stator</LabeLBig>
       </Grid>
       <Grid item>
-        <WindingTypeInputs control={control} />
+        <Alert severity="info">
+          This section is limited/buggy. You are likely better off manually modeling the stator after running the script
+        </Alert>
       </Grid>
       <Grid item>
-        <ConductorInputs control={control} />
+        <WindingTypeInputs />
+      </Grid>
+      <Grid item>
+        <ConductorInputs />
       </Grid>
     </GridCol>
   )
-}
-
-StatorInputs.propTypes = {
-  control: PropTypes.object
 }

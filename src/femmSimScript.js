@@ -194,7 +194,7 @@ function build_air_bounds()
   local y = 0
   local w = get_bound_width()
   local h = get_bound_height()
-  build_rect_block(x, y, w, h, "Air")
+  build_rect_block(x, y, w, h, "Air", "", 0, 0, 0, "corner")
 end
 
 function build_rotor(side) 
@@ -420,7 +420,7 @@ end
 function get_label_points(x, y, w, h, position) 
   local labelX = x + w / 2
   local labelY = y + h / 2
-  if label_position == "corner" then
+  if position == "corner" then
     labelX = x + w / 8
     labelY = y + h / 8
   end
@@ -436,6 +436,7 @@ function build_rect_block(x, y, w, h, material, circuit, dir, group, turns, labe
   group = group or 0
   turns = turns or 0
   label_position = label_position or "center"
+  print("material: " .. material .. ", circuit: " .. circuit .. ", dir: " .. dir .. ", group: " .. group .. ", turns: " .. turns .. ", label_position: " .. label_position)
 
   draw_rect(x, y, w, h)
 

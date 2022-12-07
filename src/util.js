@@ -2,6 +2,7 @@ import { femmSimScript } from './femmSimScript'
 
 export const YOUTUBE_URL = 'https://www.youtube.com/channel/UCQk0CkSexTb7GQvpGxj4kxw'
 export const GITHUB_URL = 'https://github.com/CJohnson25/femm-sim-gen-app/'
+export const CONSENT_COOKIE = 'femm-sim-gen-cookie-consent'
 
 export function formInputToLuaScript(formVals) {
   const stringifiedVals = JSON.stringify(formVals, null, 2)

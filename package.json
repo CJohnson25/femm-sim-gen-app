@@ -1,7 +1,7 @@
 {
   "name": "femm-sim-gen-app",
   "homepage": "http://CJohnson25.github.io/femm-sim-gen-app",
-  "version": "0.12.0",
+  "version": "0.13.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.7.1",
@@ -10,7 +10,10 @@
     "@mui/material": "^5.4.1",
     "clipboard-copy": "^4.0.1",
     "react": "^17.0.2",
+    "react-cookie": "^4.1.1",
+    "react-cookie-consent": "^7.5.0",
     "react-dom": "^17.0.2",
+    "react-ga": "^3.3.1",
     "react-hook-form": "^7.27.0",
     "react-scripts": "^5.0.1",
     "web-vitals": "^1.1.1"
