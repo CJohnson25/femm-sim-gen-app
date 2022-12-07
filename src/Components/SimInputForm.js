@@ -1,15 +1,13 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
-import { useForm } from 'react-hook-form'
-import { Grid, Typography } from '@mui/material'
+import { FormProvider, useForm } from 'react-hook-form'
+import { Grid } from '@mui/material'
 
 import { CopyScriptButton } from './CopyScriptButton'
-
 import { RotorInputs } from '../Containers/RotorInputs'
 import { GeneralInputs } from '../Containers/GeneralInputs'
 import { StatorInputs } from '../Containers/StatorInputs'
-
+import { ContainerToggle } from './ContainerToggle'
 import { formInputToLuaScript } from '../util'
 
 export function SimInputForm() {
@@ -22,9 +20,10 @@ export function SimInputForm() {
   //   'FILENAME'
   // ]
 
-  const { control, watch } = useForm({
+  const methods = useForm({
     defaultValues: {
       UNITS: 'millimeters',
+      NUM_ROTORS: 2,
       NUM_ROTOR_POLE_PAIRS: 3,
       MAGNET_GAP: 1,
       MAGNET_LENGTH: 1,
@@ -55,7 +54,7 @@ export function SimInputForm() {
       FILENAME: ''
     }
   })
-  const formVals = watch()
+  const formVals = methods.watch()
   const outputText = formVals ? formInputToLuaScript(formVals) : ''
 
   // function handleInputChange(e) {
@@ -81,22 +80,29 @@ export function SimInputForm() {
   // }
 
   return (
-    <Grid item container spacing={5}>
-      <Grid item xs={12} lg={4}>
-        <GeneralInputs control={control} />
-      </Grid>
+    <FormProvider {...methods} >
+      <Grid item container spacing={5}>
+        <Grid item xs={12} lg={4}>
+          <GeneralInputs control={methods.control} />
+        </Grid>
 
-      <Grid item xs={12} lg={4}>
-        <RotorInputs control={control} />
-      </Grid>
+        <Grid item xs={12} lg={4}>
+          <RotorInputs control={methods.control} />
+        </Grid>
 
-      <Grid item xs={12} lg={4}>
-        <StatorInputs control={control} />
-      </Grid>
+        <Grid item xs={12} lg={4}>
+          <ContainerToggle
+            label="Simulate Stator?"
+            name="STATOR"
+          >
+            <StatorInputs control={methods.control} />
+          </ContainerToggle>
+        </Grid>
 
-      <Grid item xs={12}>
-        <CopyScriptButton outputText={outputText} />
+        <Grid item xs={12}>
+          <CopyScriptButton outputText={outputText} />
+        </Grid>
       </Grid>
-    </Grid>
+    </FormProvider>
   )
 }

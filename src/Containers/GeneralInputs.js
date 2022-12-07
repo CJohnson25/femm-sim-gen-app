@@ -1,7 +1,6 @@
 import React from 'react'
-import PropTypes from 'prop-types'
 
-import { Grid, Typography } from '@mui/material'
+import { Grid } from '@mui/material'
 
 import { SimpleRadio } from '../Components/SimpleRadio'
 import { ContainerToggle } from '../Components/ContainerToggle'
@@ -11,24 +10,20 @@ import { unitTypes } from '../util'
 import { GridCol } from './GridCol'
 import { LabeLBig } from './LabeLBig'
 
-export function GeneralInputs({ control }) {
+export function GeneralInputs() {
   return (
     <GridCol>
       <Grid item>
         <LabeLBig>General</LabeLBig>
       </Grid>
       <Grid item>
-        <SimpleRadio control={control} name="UNITS" options={unitTypes} />
+        <SimpleRadio name="UNITS" options={unitTypes} />
       </Grid>
       <Grid item>
-        <ContainerToggle label="Auto run Analysis?">
-          <AnalysisInputs control={control} />
+        <ContainerToggle label="Auto run Analysis?" name="ANALYSIS">
+          <AnalysisInputs />
         </ContainerToggle>
       </Grid>
     </GridCol>
   )
-}
-
-GeneralInputs.propTypes = {
-  control: PropTypes.object
 }

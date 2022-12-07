@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import { TextField } from '@mui/material'
 
-export function SimpleTextField({ name, control, label, ...rest }) {
+export function SimpleTextField({ name, label, ...rest }) {
+  const {control} = useFormContext()
+
   return (
     <Controller
       name={name}
@@ -18,6 +20,5 @@ export function SimpleTextField({ name, control, label, ...rest }) {
 
 SimpleTextField.propTypes = {
   name: PropTypes.string,
-  control: PropTypes.object,
   label: PropTypes.string
 }

@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
 
-export function SimpleRadio({ control, name, options }) {
+export function SimpleRadio({ name, options }) {
+  const {control} = useFormContext()
+
   const getRadioOptions = () => {
     return options.map((option) => (
       <FormControlLabel
@@ -31,6 +33,5 @@ export function SimpleRadio({ control, name, options }) {
 
 SimpleRadio.propTypes = {
   name: PropTypes.string,
-  control: PropTypes.object,
   options: PropTypes.array
 }

@@ -1,10 +1,12 @@
 import React from 'react'
 import PropTypes from 'prop-types'
 
-import { Controller } from 'react-hook-form'
+import { Controller, useFormContext } from 'react-hook-form'
 import { MenuItem, Select, Typography } from '@mui/material'
 
-export function SimpleSelect({ control, name, options, label }) {
+export function SimpleSelect({ name, options, label }) {
+  const {control} = useFormContext()
+
   const getSelectOptions = () => {
     return options.map((option) => {
       return (
@@ -33,7 +35,6 @@ export function SimpleSelect({ control, name, options, label }) {
 
 SimpleSelect.propTypes = {
   name: PropTypes.string,
-  control: PropTypes.object,
   label: PropTypes.string,
   options: PropTypes.array
 }
