@@ -4,6 +4,8 @@ export const YOUTUBE_URL = 'https://www.youtube.com/channel/UCQk0CkSexTb7GQvpGxj
 export const GITHUB_URL = 'https://github.com/CJohnson25/femm-sim-gen-app/'
 export const CONSENT_COOKIE = 'femm-sim-gen-cookie-consent'
 
+export const INPUT_WIDTH = '100px'
+
 export function formInputToLuaScript(formVals) {
   const stringifiedVals = JSON.stringify(formVals, null, 2)
   const sani = stringifiedVals.replace(/^{\n?|\n?}$/g, '')
@@ -85,4 +87,13 @@ export const getUnits = (unit) => {
     }
   }
   return unitsMeta?.[unit]
+}
+
+// Set AIR_GAP based on STATOR_HEIGHT and ROTOR_TO_STATOR_GAP if STATOR == 1
+export const getAirGap = (formVals) => {
+  if (formVals.STATOR === 1) {
+    return parseFloat(formVals.STATOR_HEIGHT) + (parseFloat(formVals.ROTOR_TO_STATOR_GAP) * 2)
+  }
+
+  return formVals.AIR_GAP
 }

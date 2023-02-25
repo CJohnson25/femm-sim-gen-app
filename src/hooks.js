@@ -1,6 +1,6 @@
-import { CONSENT_COOKIE, getUnits } from "./util"
+import { CONSENT_COOKIE, getUnits } from './util'
 import { useCookies } from 'react-cookie'
-import { useFormContext } from "react-hook-form"
+import { useFormContext } from 'react-hook-form'
 
 export const useUnitAdormentLabel = () => {
   const {control} = useFormContext()

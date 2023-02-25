@@ -4,7 +4,7 @@ import { Grid } from '@mui/material'
 
 export function GridRow({ children, ...rest }) {
   return (
-    <Grid container spacing={2} justifyContent="center" {...rest} >
+    <Grid container spacing={3} justifyContent="center" alignItems="center" {...rest} >
       {children}
     </Grid>
   )
