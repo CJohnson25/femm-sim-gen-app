@@ -1,37 +1,41 @@
 module.exports = {
-    'env': {
-        'browser': true,
-        'es2021': true
-    },
-    'extends': [
-        'eslint:recommended',
-        'plugin:react/recommended'
+  'env': {
+    'browser': true,
+    'es2021': true
+  },
+  'extends': [
+    'eslint:recommended',
+    'plugin:react/recommended'
+  ],
+  'overrides': [
+  ],
+  'parserOptions': {
+    'ecmaVersion': 'latest',
+    'sourceType': 'module'
+  },
+  'plugins': [
+    'react'
+  ],
+  'rules': {
+    'indent': [
+      'warn',
+      2
     ],
-    'overrides': [
+    'linebreak-style': [
+      'warn',
+      'windows'
     ],
-    'parserOptions': {
-        'ecmaVersion': 'latest',
-        'sourceType': 'module'
-    },
-    'plugins': [
-        'react'
+    'quotes': [
+      'warn',
+      'single'
     ],
-    'rules': {
-        'indent': [
-            'error',
-            4
-        ],
-        'linebreak-style': [
-            'error',
-            'windows'
-        ],
-        'quotes': [
-            'error',
-            'single'
-        ],
-        'semi': [
-            'error',
-            'never'
-        ]
-    }
+    'semi': [
+      'error',
+      'never'
+    ],
+    'no-unused-vars': [
+      'warn', 
+      { 'vars': 'all', 'args': 'after-used', 'ignoreRestSiblings': false }
+    ]
+  }
 }
