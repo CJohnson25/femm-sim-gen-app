@@ -2,9 +2,9 @@ import React from 'react'
 import PropTypes from 'prop-types'
 
 import { Controller, useFormContext } from 'react-hook-form'
-import { FormControlLabel, Radio, RadioGroup } from '@mui/material'
+import { FormControlLabel, FormLabel, Radio, RadioGroup } from '@mui/material'
 
-export function SimpleRadio({ name, options }) {
+export function SimpleRadio({ name, label, options }) {
   const {control} = useFormContext()
 
   const getRadioOptions = () => {
@@ -23,9 +23,12 @@ export function SimpleRadio({ name, options }) {
       name={name}
       control={control}
       render={({ field: { onChange, value } }) => (
-        <RadioGroup value={value} onChange={onChange}>
-          {getRadioOptions()}
-        </RadioGroup>
+        <>
+          <FormLabel>{label}</FormLabel>
+          <RadioGroup value={value} onChange={onChange} >
+            {getRadioOptions()}
+          </RadioGroup>
+        </>
       )}
     />
   )
@@ -33,5 +36,6 @@ export function SimpleRadio({ name, options }) {
 
 SimpleRadio.propTypes = {
   name: PropTypes.string,
+  label: PropTypes.string,
   options: PropTypes.array
 }

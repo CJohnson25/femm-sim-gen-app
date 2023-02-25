@@ -7,7 +7,7 @@ import { CopyToClipboard } from './CopyToClipboard'
 
 export function CopyScriptButton({ outputText }) {
   return (
-    <Grid container spacing={2} justifyContent="center">
+    <Grid item container spacing={2} justifyContent="center">
       <Grid item xs={8}>
         <Typography variant="h2">Output</Typography>
         <Typography>

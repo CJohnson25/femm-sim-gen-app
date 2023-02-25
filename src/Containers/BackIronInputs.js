@@ -6,7 +6,7 @@ import { SimpleTextField } from '../Components/SimpleTextField'
 import { SimpleSelect } from '../Components/SimpleSelect'
 
 import { GridRow } from './GridRow'
-import { ironTypes } from '../util'
+import { INPUT_WIDTH, ironTypes } from '../util'
 import { useUnitAdormentLabel } from '../hooks'
 
 export function BackIronInputs() {
@@ -19,6 +19,7 @@ export function BackIronInputs() {
           name="BACK_IRON_HEIGHT"
           label="Back Iron Height"
           InputProps={{endAdornment: <InputAdornment position="end">{unitLabel}</InputAdornment>}}
+          style={{width:INPUT_WIDTH}}
         />
       </Grid>
       <Grid item>
@@ -26,6 +27,7 @@ export function BackIronInputs() {
           label="Iron Material"
           name="BACK_IRON_MATERIAL"
           options={ironTypes}
+          style={{width:INPUT_WIDTH}}
         />
       </Grid>
     </GridRow>

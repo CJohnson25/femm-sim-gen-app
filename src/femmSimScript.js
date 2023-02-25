@@ -56,7 +56,7 @@ function build_objects()
 end
 
 function get_full_filepath()
-  return FILEPATH .. FILENAME
+  return FILEPATH .. FILENAME.fem
 end
 
 function get_v_gap() 
@@ -233,11 +233,18 @@ function get_y_offset(side, is_halbach)
   -- Far side
   if side == 1 then
     y = y + (ROTOR_TO_STATOR_GAP * 2) + STATOR_HEIGHT + get_tallest_magnet_height()
-
-    local height_diff = get_magnet_height_diff()
-    if is_halbach and (not is_halbach_taller()) then
-      y = y + height_diff
+    if get_magnet_height_diff() > 0 then
+      if is_halbach_taller() then
+        if not is_halbach then
+          y = y + get_magnet_height_diff()
+        end
+      else
+        if is_halbach then
+         y = y + get_magnet_height_diff()
+        end
+      end
     end
+
   end
 
   return y
@@ -254,6 +261,10 @@ function get_x_offset(x, is_halbach, is_half)
   end
 
   return x + w + MAGNET_GAP 
+end
+
+function get_center_y()
+  return get_v_gap() + get_tallest_magnet_height() + ROTOR_TO_STATOR_GAP + (STATOR_HEIGHT / 2)
 end
 
 function build_rotor_magnets(side)
@@ -391,12 +402,54 @@ function get_round_conductor_x_offset()
 end
 
 function build_analysis_nodes() 
+  build_center_horizontal_analysis_node()
+  build_variable_horizontal_analysis_node()
+
+  build_ns_vertical_analysis_node()
+  if HALBACH == 1 then
+    build_halbach_vertical_analysis_node()
+  end
+end
+
+function build_center_horizontal_analysis_node()
   local x = get_h_gap()
   local x1 = x + get_total_width()
-  local y = get_v_gap() + get_tallest_magnet_height() + ROTOR_TO_STATOR_GAP + (STATOR_HEIGHT / 2)
-  
+  local y = get_center_y()
+
   mi_addnode(x, y)
   mi_addnode(x1, y)
+end
+
+function build_variable_horizontal_analysis_node()
+  local x = get_h_gap()
+  local x1 = x + get_total_width()
+  local y = get_v_gap() + get_tallest_magnet_height() + ANALYSIS_HEIGHT
+
+  mi_addnode(x, y)
+  mi_addnode(x1, y)
+end
+
+function build_ns_vertical_analysis_node() 
+  -- Get center of a n/s magnet pole
+  local x = get_h_gap() + (MAGNET_WIDTH / 2) + MAGNET_GAP + (MAGNET_WIDTH / 2)
+  if HALBACH == 1 then
+    x = x + HALBACH_WIDTH + MAGNET_GAP 
+  end 
+  local y = get_v_gap() + MAGNET_HEIGHT
+  local y1 = y + (ROTOR_TO_STATOR_GAP * 2) + STATOR_HEIGHT
+
+  mi_addnode(x, y)
+  mi_addnode(x, y1)
+end
+
+function build_halbach_vertical_analysis_node()
+  -- Get center of a halbach magnet pole
+  local x = get_h_gap() + (MAGNET_WIDTH / 2) + MAGNET_GAP + (HALBACH_WIDTH / 2)
+  local y = get_v_gap() + HALBACH_HEIGHT
+  local y1 = y + (ROTOR_TO_STATOR_GAP * 2) + STATOR_HEIGHT + (get_magnet_height_diff() * 2)
+
+  mi_addnode(x, y)
+  mi_addnode(x, y1)
 end
 
 function draw_circle(x, y, h)

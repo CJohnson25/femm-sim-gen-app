@@ -6,7 +6,7 @@ import { SimpleTextField } from '../Components/SimpleTextField'
 import { SimpleSelect } from '../Components/SimpleSelect'
 import { ContainerToggle } from '../Components/ContainerToggle'
 
-import { magnetTypes } from '../util'
+import { INPUT_WIDTH, magnetTypes } from '../util'
 import { useUnitAdormentLabel } from '../hooks'
 import { GridRow } from './GridRow'
 import { GridCol } from './GridCol'
@@ -17,38 +17,42 @@ export function MagnetInputs() {
   const { label: unitLabel } = useUnitAdormentLabel()
 
   return (
-    <GridCol>
+    <GridCol item>
       <Grid item>
         <LabelSmall>Magnets</LabelSmall>
       </Grid>
       <GridRow item>
-        <Grid item xs={4}>
+        <Grid item>
+          <SimpleSelect
+            name="MAGNET_GRADE"
+            label="Grade"
+            options={magnetTypes}
+            style={{width:INPUT_WIDTH}}
+          />
+        </Grid>
+        <Grid item>
           <SimpleTextField
             name="MAGNET_LENGTH"
             label="Length"
             InputProps={{ endAdornment: <InputAdornment position="end">{unitLabel}</InputAdornment> }}
+            style={{width:INPUT_WIDTH}}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item>
           <SimpleTextField name="MAGNET_WIDTH" label="Width"
             InputProps={{ endAdornment: <InputAdornment position="end">{unitLabel}</InputAdornment> }}
+            style={{width:INPUT_WIDTH}}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item>
           <SimpleTextField
             name="MAGNET_HEIGHT"
             label="Height"
             InputProps={{ endAdornment: <InputAdornment position="end">{unitLabel}</InputAdornment> }}
+            style={{width:INPUT_WIDTH}}
           />
         </Grid>
       </GridRow>
-      <Grid item>
-        <SimpleSelect
-          name="MAGNET_GRADE"
-          label="Grade"
-          options={magnetTypes}
-        />
-      </Grid>
       <Grid item>
         <ContainerToggle label="Halbach?" name="HALBACH">
           <HalbachInputs />

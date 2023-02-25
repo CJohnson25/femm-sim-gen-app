@@ -1,6 +1,6 @@
 import React from 'react'
 
-import { Grid, InputAdornment } from '@mui/material'
+import { Alert, Grid, InputAdornment } from '@mui/material'
 
 import { SimpleTextField } from '../Components/SimpleTextField'
 import { ContainerToggle } from '../Components/ContainerToggle'
@@ -12,36 +12,57 @@ import { GridCol } from './GridCol'
 import { GridRow } from './GridRow'
 import { useUnitAdormentLabel } from '../hooks'
 import { SimpleSelect } from '../Components/SimpleSelect'
+import { INPUT_WIDTH } from '../util'
+import { useFormContext } from 'react-hook-form'
 
 export function RotorInputs() {
   const {label: unitLabel} = useUnitAdormentLabel()
+  const { getValues } = useFormContext()
 
   return (
-    <GridCol>
-      <Grid item>
-        <LabeLBig>Rotor</LabeLBig>
-      </Grid>
-      <Grid item>
-        <SimpleSelect  name='NUM_ROTORS' label='Rotors to simulate' options={[2, 1]}/>
-      </Grid>
+    <GridCol item md={4}>
       <GridRow item>
-        <Grid item xs={4}>
-          <SimpleTextField  name="AIR_GAP" label="Air Gap"
-            InputProps={{ endAdornment: <InputAdornment position="end">{unitLabel}</InputAdornment> }}
+        <Grid item>
+          <LabeLBig>Rotor</LabeLBig>
+        </Grid>
+      </GridRow>
+      <GridRow item alignItems="flex-start">
+        <Grid item>
+          <SimpleSelect  
+            name='NUM_ROTORS'
+            label='# of Rotors'
+            options={[2, 1]}
+            // style={{width:INPUT_WIDTH}}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item>
           <SimpleTextField
             name="MAGNET_GAP"
             label="Magnet Spacing"
             InputProps={{ endAdornment: <InputAdornment position="end">{unitLabel}</InputAdornment> }}
+            style={{width:INPUT_WIDTH}}
           />
         </Grid>
-        <Grid item xs={4}>
+        <Grid item>
           <SimpleTextField
             name="NUM_ROTOR_POLE_PAIRS"
             label="# of Pole Pairs"
+            style={{width:INPUT_WIDTH}}
           />
+        </Grid>
+        <Grid item>
+          <SimpleTextField  
+            name="AIR_GAP"
+            label="Air Gap"
+            disabled={getValues('STATOR')}
+            InputProps={{ endAdornment: <InputAdornment position="end">{unitLabel}</InputAdornment> }}
+            style={{width:INPUT_WIDTH}}
+          />
+        </Grid>
+        <Grid item xs={12}>
+          <Alert severity="info">
+            There is currently a bug in the lua script when only using Air Gap. To work around this, use &apos;Stator Height&apos; and &apos;Rotor/Stator Air Gap&apos; fields to change the Air Gap. Turn the Stator toggle off if you ultimately would not like to model a stator.
+          </Alert>  
         </Grid>
       </GridRow>
       <Grid item>

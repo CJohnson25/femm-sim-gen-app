@@ -3,8 +3,9 @@ import PropTypes from 'prop-types'
 
 import { Grid, FormControlLabel, Switch, FormLabel } from '@mui/material'
 import { useFormContext } from 'react-hook-form'
+import { GridCol } from '../Containers/GridCol'
 
-export function ContainerToggle({ label, children, name, onLabel= 'Yes', offLabel= 'No', childrenShowFalse = null }) {
+export function ContainerToggle({ label, children, name, onLabel= 'Yes', offLabel= 'No', childrenShowFalse = null, onChange = undefined }) {
   const [showChildren, setShowChildren] = React.useState(false)
   const {setValue} = useFormContext()
 
@@ -12,11 +13,15 @@ export function ContainerToggle({ label, children, name, onLabel= 'Yes', offLabe
     const val = showChildren === false ? 1 : 0 // cast to int
     setValue(name, val)
     setShowChildren(!showChildren)
+
+    if (onChange) {
+      onChange(val)
+    }
   }
 
   return (
-    <Grid container spacing={2}>
-      <Grid item xs={12}>
+    <GridCol>
+      <Grid item>
         <FormLabel component="legend">{label}</FormLabel>
         <FormControlLabel
           control={
@@ -29,10 +34,15 @@ export function ContainerToggle({ label, children, name, onLabel= 'Yes', offLabe
           label={!showChildren ? offLabel : onLabel}
         />
       </Grid>
-      <Grid item xs={12}>
-        {showChildren ? children : childrenShowFalse}
-      </Grid>
-    </Grid>
+      {showChildren 
+        ? <Grid item>
+          {children}
+        </Grid>
+        : childrenShowFalse && <Grid item>
+          {childrenShowFalse}
+        </Grid>
+      }
+    </GridCol>
   )
 }
 
@@ -43,5 +53,6 @@ ContainerToggle.propTypes = {
   onLabel: PropTypes.string,
   offLabel: PropTypes.string,
   children: PropTypes.any,
-  childrenShowFalse: PropTypes.object
+  childrenShowFalse: PropTypes.object,
+  onChange: PropTypes.func
 }

@@ -6,6 +6,7 @@ import { SimpleTextField } from '../Components/SimpleTextField'
 
 import { GridCol } from './GridCol'
 import { useUnitAdormentLabel } from '../hooks'
+import { INPUT_WIDTH } from '../util'
 
 export function CircleCondInputs() {
   const {label: unitLabel} = useUnitAdormentLabel()
@@ -15,8 +16,9 @@ export function CircleCondInputs() {
       <Grid item>
         <SimpleTextField
           name="CONDUCTOR_DIAMETER"
-          label="Conductor Diameter"
+          label="Diameter"
           InputProps={{endAdornment: <InputAdornment position="end">{unitLabel}</InputAdornment>}}
+          style={{width:INPUT_WIDTH}}
         />
       </Grid>
     </GridCol>
